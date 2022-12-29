@@ -1,6 +1,5 @@
 builddir/
 uploads/
-views/*.cc
-views/*.h
+views/
 .vscode/
 .DS_Store
