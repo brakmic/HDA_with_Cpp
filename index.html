@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C++ Web Server</title>
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="vendor/bootstrap-3.4.1-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="vendor/bootstrap-3.4.1-dist/css/bootstrap-theme.min.css">
+  <script src="vendor/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+  <!-- htmx -->
+  <script src="vendor/htmx.min.js"></script>
+</head>
+<body>
+  <div id="main" class="container">
+    <div class="jumbotron">
+      <h2>Hypermedia-driven apps</h2>
+      <p>This is an example web app built with <strong>htmx</strong> and <strong>Drogon C++ web framework</strong>.</p>
+      <button class="btn btn-primary btn-lg"
+      role="button"
+        hx-get="/contacts"
+        hx-trigger="click, keyup[ctrlKey && key == 'L' || key == 'l'] from:body"
+        hx-target="#main"
+        hx-swap="innerHTML">
+    Run the app
+  </button>
+    </div>
+</div>
+</body>
+</html>
