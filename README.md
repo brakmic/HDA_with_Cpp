@@ -97,7 +97,7 @@ The `triplet` carries the information about the host machine, e.g. `x64-osx`.
 
 The `vcpkg_root` is the root folder containing packages installed by `vcpkg`.
 
-![meson_build](images/meson_compile.png)
+![compile_project](videos/compile_project.gif)
 
 ## Application architecture
 
