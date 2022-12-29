@@ -1,0 +1,42 @@
+<%inc
+#include "../dtos/contact_dto.hpp"
+%>
+<%c++
+    using namespace dws::dtos;
+    auto contact=@@.get<ContactDto>("contact");
+%>
+<div name="new-contact">
+<div class="input-group mb-3 input-group-sm">
+     <div class="input-group-prepend">
+       <span class="input-group-text">First name</span>
+    </div>
+    <input class="form-control" name="firstname" id="firstname" type="text" placeholder="First name" value="{%contact.FirstName%}">
+  </div>
+  <div class="input-group mb-3 input-group-sm">
+     <div class="input-group-prepend">
+       <span class="input-group-text">Last name</span>
+    </div>
+    <input class="form-control" name="lastname" id="lastname" type="text" placeholder="Last name" value="{%contact.LastName%}">
+  </div>
+  <div class="input-group mb-3 input-group-sm">
+     <div class="input-group-prepend">
+       <span class="input-group-text">EMail</span>
+    </div>
+    <input class="form-control" name="email" id="email" type="text" placeholder="EMail" value="{%contact.EMail%}">
+  </div>
+  <div class="input-group mb-3 input-group-sm">
+     <div class="input-group-prepend">
+       <span class="input-group-text">Phone</span>
+    </div>
+    <input class="form-control" name="phone" id="phone" type="text" placeholder="Phone" value="{%contact.Phone%}">
+  </div>
+    <button class="btn btn-secondary"
+            hx-get="/contacts"
+            hx-target="#main"
+            hx-swap="innerHTML">Cancel</button>
+    <button class="btn btn-primary"
+            hx-post="/contacts/new"
+            hx-include="input"
+            hx-target="#main"
+            hx-swap="innerHTML">Save</button>
+</div>

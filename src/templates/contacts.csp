@@ -1,0 +1,71 @@
+<%inc
+#include "../models/contact.hpp"
+%>
+<%c++
+    using namespace dws::models;
+    auto contacts=@@.get<std::vector<Contact>>("contacts");
+%>
+<%c++ if(contacts.size()>0){%>
+    <h2>Contacts</h2>
+<div class="row">
+  <div class="col-lg-6">
+    <div class="input-group">
+      <span class="input-group-btn">
+        <button class="btn btn-default"
+              hx-post="/contacts"
+              hx-target="#main"
+              hx-include="[name='firstname']">Search</button>
+      </span>
+      <input type="text" name="firstname" class="form-control" placeholder="Contact's first name">
+    </div>
+  </div>
+</div>
+
+    <table class="table table-striped table-hover table-responsive table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">First name</th>
+          <th scope="col">Last name</th>
+          <th scope="col">EMail</th>
+          <th scope="col">Phone</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%c++ for(const auto& c : contacts){%>
+          <th scope="row">{%c.ID%}</th>
+            <td>{%c.FirstName%}</td>
+            <td>{%c.LastName%}</td>
+            <td>{%c.EMail%}</td>
+            <td>{%c.Phone%}</td>
+            <td>
+              <a style="text-decoration: underline; cursor: pointer;"
+                  hx-get="/contacts/{%c.ID%}/edit"
+                  hx-target="#main"
+                  hx-swap="innerHTML">Edit</a>
+              <a style="text-decoration: underline; cursor: pointer;"
+                  hx-get="/contacts/{%c.ID%}"
+                  hx-target="#main"
+                  hx-swap="innerHTML">View</a>
+              <a style="text-decoration: underline; cursor: pointer; color: red;"
+                  hx-get="/contacts/{%c.ID%}/delete"
+                  hx-confirm="Are you sure you wish to delete this contact?"
+                  hx-target="#main"
+                  hx-swap="innerHTML">Delete</a>    
+            </td>
+          </tr>
+          <%c++}%>
+      </tbody>
+    </table>
+    <p>
+      <button data-bs-toggle="modal"
+              data-bs-target="#addContactModal"
+              class="btn btn-primary"
+              hx-get="/contacts/new"
+              hx-target="#main"
+              hx-swap="innerHTML">Add Contact</button>
+    </p>
+    <%c++ }%>
+</body>
+</html>

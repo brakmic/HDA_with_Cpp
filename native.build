@@ -1,0 +1,9 @@
+[constants]
+
+[built-in options]
+c_std='c17'
+cpp_std='c++20'
+
+[binaries]
+c = '/usr/local/bin/gcc'
+cpp = '/usr/local/bin/g++'

@@ -1,0 +1,7 @@
+CREATE TABLE contacts (
+	ID INTEGER PRIMARY KEY AUTOINCREMENT,
+	FirstName TEXT,
+	LastName TEXT,
+	EMail TEXT,
+	Phone TEXT
+);
