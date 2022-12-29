@@ -1,0 +1,29 @@
+<%inc
+#include "../models/contact.hpp"
+%>
+<%c++
+    using namespace dws::models;
+    auto c=@@.get<Contact>("contact");
+%>
+<h2>{%c.FirstName%} {%c.LastName%}</h2>
+<div>
+  <div>Phone: {%c.Phone%}</div>
+  <div>Email: {%c.EMail%}</div>
+</div>
+
+<p>
+<button class="btn btn-primary"
+      hx-get="/contacts/{%c.ID%}/edit"
+      hx-target="#main"
+      hx-swap="innerHTML">Edit</button>
+<button class="btn btn-danger"
+      href="#"
+      hx-get="/contacts/{%c.ID%}/delete"
+      hx-target="#main"
+      hx-confirm="Are you sure you wish to delete this contact?"
+      hx-swap="innerHTML">Delete</button>
+<button class="btn btn-info"
+      hx-get="/contacts"
+      hx-target="#main"
+      hx-swap="innerHTML">Back</button>
+</p>
