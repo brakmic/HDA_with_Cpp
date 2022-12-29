@@ -113,7 +113,5 @@ void Contacts::delete_(const HttpRequestPtr &req,
   if (existing.ID) {
     db.delete_contact(id);
   }
-  // return all contacts via GET /contacts request
-  list(HttpRequest::newHttpRequest(),
-       std::forward<decltype(callback)>(callback));
+  callback(res);
 }

@@ -32,7 +32,10 @@
           <th scope="col"></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody
+          hx-confirm="Are you sure you wish to delete this contact?"
+          hx-target="closest tr"
+          hx-swap="outerHTML swap:1s">
         <%c++ for(const auto& c : contacts){%>
           <th scope="row">{%c.ID%}</th>
             <td>{%c.FirstName%}</td>
@@ -49,9 +52,7 @@
                   hx-target="#main"
                   hx-swap="innerHTML">View</a>
               <a style="text-decoration: underline; cursor: pointer; color: red;"
-                  hx-get="/contacts/{%c.ID%}/delete"
-                  hx-confirm="Are you sure you wish to delete this contact?"
-                  hx-target="#main"
+                  hx-delete="/contacts/{%c.ID%}/delete"
                   hx-swap="innerHTML">Delete</a>    
             </td>
           </tr>
