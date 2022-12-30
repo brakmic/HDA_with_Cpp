@@ -1,3 +1,5 @@
+
+#define FMT_HEADER_ONLY
 #include "contacts.hpp"
 
 #include <fmt/format.h>
