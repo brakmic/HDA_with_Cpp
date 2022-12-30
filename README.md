@@ -10,7 +10,7 @@ The idea for this project came while reading the excellent book [Hypermedia Syst
 
 Instead of using JavaScript *to overcome* HTML, a strategy that basically reproduces thick-clients of the 90es, the authors use `htmx` **to augment** it. They make it capable of doing *more* without falling back to clever JavaScript tricks. Of course, JS isn't forbidden and `htmx` itself relies on it for its own development, but JS is not visible as there is no actual need for it.
 
-Instead of using JS to replace seemingly "insufficient" hypermedia controls, **htmx** extends them. It makes them capable of doing 
+We don't need to use JS to replace seemingly "insufficient" hypermedia controls, because **htmx** is here to extend them. It makes them capable of doing 
 *more* as originally defined. An anchor tag (`<a>`), for example, can be "upgraded" so that it can execute POST, PUT, PATCH, or even DELETE requests. A `<form>` tag doesn't have to be the only hypermedia control for sending data via POST requests. How about writing your own controls that can do exactly the same? Or maybe `<form>`s that can PATCH existing entries on the server? What usually demands explicit JS code can now be done *declaratively* with *upgraded* hypermedia controls.
 
 Here's an example from this project. Two buttons (*Cancel* & *Save*) which can be found in almost every sufficiently complex web app.
@@ -37,6 +37,37 @@ Believe it or not, but these two utilize the following functionalities:
 * Transclusion (that is, *where* and *how* to insert the server response data)
 
 And not a single line of JavaScript was needed to make it work. This is how powerful hypermedia architecture actually is.
+
+Additionally, we also use [_hyperscript](https://hyperscript.org/), a small library for event handling and DOM manipulation. With it, we can listen and dispatch events, manipulate DOM objects without leaving HTML.
+
+Here's an example from this project:
+
+```html
+<button id="edit-c" class="btn btn-primary"
+      hx-get="/contacts/{%c.ID%}/edit"
+      hx-target="#main"
+      hx-swap="innerHTML">Edit</button>
+<button class="btn btn-danger"
+      hx-delete="/contacts/{%c.ID%}/delete"
+      hx-confirm="Are you sure you wish to delete this contact?"
+      hx-target="this"
+      hx-swap="none"
+      _="on click remove #edit-c
+                  then remove me"
+      >Delete</button>
+<button class="btn btn-info"
+      hx-get="/contacts"
+      hx-target="#main"
+      hx-swap="innerHTML">Back</button>
+```
+
+In the second `<button>` control we have a few bits of _hyperscript that do the following:
+
+* reacts to click events
+* then removes the control with *id=edit-c*
+* then removes the button that reacted to click event (it removes itself)
+
+The final result is the removal of the buttons `Edit` and `Delete`. Only the button `Back` remains.
 
 -----
 
@@ -119,12 +150,16 @@ The database in use is SQLite3 but it can be replaced easily with any other SQL 
 
 ## HTML / Web App
 
-The web application starts by loading the `index.html` which contains a `div` tag with *id="main"*. Throughout the app, this tag will be used by other controls to dynamically replace its contents without any page refreshes. However, unlike other typical `modern` web apps, we use no JS frameworks like React or Angular to make the app responsive. Instead, we load `htmx` which is the only required scripting library. There are also three `bootstrap` resources involved, but this is just make the app look better. Bootstrap is not a requirement and can be replaced by any other library or own stylesheets.
+The web application starts by loading the `index.html` which contains a `div` tag with *id="main"*. Throughout the app, this tag will be used by other controls to dynamically replace its contents without any page refreshes. However, unlike other typical `modern` web apps, we use no JS frameworks like React or Angular to make the app responsive. Instead, we load `htmx` which is the only required scripting library. There are also three `bootstrap` resources involved, but this is just make the app look better. Bootstrap is not a requirement and can be replaced by any other library or own stylesheets. The same applies to `jQuery` that is included as a bootstrap dependency. Any of those libraries can be safely removed as they don't affect `htmx` or `_hyperscript`.
+
+The web app communicates with the server in a standard request-response fashion. But unlike so many other web apps out there, no JSON is being used. Instead, the server is only sending pieces of HTML code that the client uses to update the current state of the app.
 
 ## CHANGELOG
 * 30/12/2022:    
-    -  added hyperscript & jQuery scripts
-    -  changed button behavior in "delete contact" view
+    -  added _hyperscript scripts in index.html
+    -  added jQuery in index.html (bootstrap needs it)
+    -  changed button behavior when deleting contacts
+    -  added example with _hyperscript
 
 ## LICENSE
 
