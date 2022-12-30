@@ -12,16 +12,18 @@
 </div>
 
 <p>
-<button class="btn btn-primary"
+<button id="edit-c" class="btn btn-primary"
       hx-get="/contacts/{%c.ID%}/edit"
       hx-target="#main"
       hx-swap="innerHTML">Edit</button>
 <button class="btn btn-danger"
-      href="#"
-      hx-get="/contacts/{%c.ID%}/delete"
-      hx-target="#main"
+      hx-delete="/contacts/{%c.ID%}/delete"
       hx-confirm="Are you sure you wish to delete this contact?"
-      hx-swap="innerHTML">Delete</button>
+      hx-target="this"
+      hx-swap="none"
+      _="on click remove #edit-c
+                  then remove me"
+      >Delete</button>
 <button class="btn btn-info"
       hx-get="/contacts"
       hx-target="#main"
