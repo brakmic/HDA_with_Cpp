@@ -100,6 +100,7 @@ The following packages are needed:
 
     drogon
     drogon[ctl]
+    boost
     trantor
     jsoncpp
     openssl
@@ -112,6 +113,10 @@ The following packages are needed:
     soci[sqlite3]
 
 The search for them is easy: `vcpkg search PACKAGE_NAME`
+
+Windows users will need to manually add the path to `drogon_ctl` binary. `vcpkg` installs it under its default package location, e.g. `C:\SOME_ROOT_PATH\vcpkg\packages\drogon_x86-windows\tools\drogon`
+
+`drogon_ctl` will be used by `Meson` to convert CSP templates into C++ files.
 
 ### C++ build system
 
