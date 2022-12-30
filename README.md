@@ -99,6 +99,7 @@ To install a package, simply invoke `vcpkg install PACKAGE_NAME`.
 The following packages are needed:
 
     drogon
+    drogon[ctl]
     trantor
     jsoncpp
     openssl
