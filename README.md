@@ -100,23 +100,17 @@ The following packages are needed:
 
     drogon
     drogon[ctl]
-    boost
-    trantor
-    jsoncpp
-    openssl
-    brotli
-    cares
-    zlib
-    fmt
     sqlite3
     soci[core]
     soci[sqlite3]
 
 The search for them is easy: `vcpkg search PACKAGE_NAME`
 
-Windows users will need to manually add the path to `drogon_ctl` binary. `vcpkg` installs it under its default package location, e.g. `C:\SOME_ROOT_PATH\vcpkg\packages\drogon_x86-windows\tools\drogon`
+Windows users will have to use the `recurse` flag for some of the packages. Fo example: `vcpkg install soci[sqlite3] --recurse`
 
-`drogon_ctl` will be used by `Meson` to convert CSP templates into C++ files.
+Windows users will need to manually add the path to `drogon_ctl` binary. `vcpkg` installs it under its default package location, e.g. `C:\SOME_ROOT_PATH\vcpkg\packages\drogon_x64-windows\tools\drogon`
+
+However, I haven't been able to compile it under Windows as the [MinGW](https://github.com/microsoft/vcpkg/blob/master/docs/users/mingw.md) compiler breaks during the Drogon compilation.
 
 ### C++ build system
 
@@ -138,6 +132,8 @@ Before trying to build the project, please, adapt these two variables in the `me
 The `triplet` carries the information about the host machine, e.g. `x64-osx`.
 
 The `vcpkg_root` is the root folder containing packages installed by `vcpkg`.
+
+`drogon_ctl` will be used by `Meson` to convert CSP templates into C++ files.
 
 ![compile_project](videos/compile_project.gif)
 

@@ -1,5 +1,6 @@
+#define FMT_HEADER_ONLY
 #include <drogon/HttpAppFramework.h>
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 #include <iostream>
 #include <string>

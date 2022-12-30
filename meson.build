@@ -133,19 +133,12 @@ sources += dtos_src
 # includes
 incdir = include_directories(
     [
-        'include',
+        join_paths(meson.source_root(), 'include'),
         db_dir,
         models_dir,
         views_dir,
         dtos_dir,
         vcpkg_root / 'packages/drogon_' + triplet + '/include',
-        vcpkg_root / 'packages/boost-utility_' + triplet + '/include',
-        vcpkg_root / 'packages/boost-config_' + triplet + '/include',
-        vcpkg_root / 'packages/boost-io_' + triplet + '/include',
-        vcpkg_root / 'packages/boost-throw-exception_' + triplet + '/include',
-        vcpkg_root / 'packages/boost-assert_' + triplet + '/include',
-        vcpkg_root / 'packages/boost-functional_' + triplet + '/include',
-        vcpkg_root / 'packages/boost-container_' + triplet + '/include',
         vcpkg_root / 'packages/trantor_' + triplet + '/include',
         vcpkg_root / 'packages/jsoncpp_' + triplet + '/include',
         vcpkg_root / 'packages/fmt_' + triplet + '/include',
@@ -205,11 +198,6 @@ libz = cpp.find_library(
     dirs: [vcpkg_root / 'packages/zlib_' + triplet + '/lib'],
 )
 
-libfmt = cpp.find_library(
-    'fmt',
-    dirs: [vcpkg_root / 'packages/fmt_' + triplet + '/lib'],
-)
-
 libsqlite3 = cpp.find_library(
     'sqlite3',
     dirs: [vcpkg_root / 'packages/sqlite3_' + triplet + '/lib'],
@@ -260,7 +248,6 @@ exe = executable(
         libbrotli_dec,
         libcares,
         libz,
-        libfmt,
         libsqlite3,
         libsoci_core,
         libsoci_sqlite3,

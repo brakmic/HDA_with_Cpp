@@ -1,6 +1,7 @@
+#define FMT_HEADER_ONLY
 #include "db_mgr.hpp"
 
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 #include <iostream>
 
