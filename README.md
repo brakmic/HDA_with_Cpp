@@ -7,6 +7,7 @@ This repository contains an [HDA](https://htmx.org/essays/hypermedia-driven-appl
 The aim was to create a responsive "web app" without using any of the usual JavaScript frameworks.
 
 The idea for this project came while reading the excellent book [Hypermedia Systems](https://hypermedia.systems/). In it, the authors talk about alternative ways for writing `modern` web applications. Unlike most of the other books on web development, the authors don't rely on any JavaScript framework, but instead go back to the roots of the hypermedia architecture that is `the web` itself.
+### htmx
 
 Instead of using JavaScript *to overcome* HTML, a strategy that basically reproduces thick-clients of the 90es, the authors use `htmx` **to augment** it. They make it capable of doing *more* without falling back to clever JavaScript tricks. Of course, JS isn't forbidden and `htmx` itself relies on it for its own development, but JS is not visible as there is no actual need for it.
 
@@ -38,6 +39,8 @@ Believe it or not, but these two utilize the following functionalities:
 
 And not a single line of JavaScript was needed to make it work. This is how powerful hypermedia architecture actually is.
 
+### Hyperscript
+
 We also use [_hyperscript](https://hyperscript.org/), a small library for event handling and DOM manipulation. With it, we can listen to and dispatch events, manipulate DOM objects, all without leaving HTML.
 
 Here's an example from this project:
@@ -61,13 +64,15 @@ Here's an example from this project:
       hx-swap="innerHTML">Back</button>
 ```
 
-In the second `<button>` control we have a few bits of _hyperscript that do the following:
+In the second `<button>` control we have a few bits of _hyperscript that does the following:
 
 * reacts to click events
 * then removes the control with *id=edit-c*
 * then removes the button that reacted to click event (it removes itself)
 
 The final result is the removal of the buttons `Edit` and `Delete`. Only the button `Back` remains.
+
+![using_hyperscript](videos/using_hyperscript.gif)
 
 -----
 
@@ -160,6 +165,7 @@ The web app communicates with the server in a standard request-response fashion.
     -  added jQuery in index.html (bootstrap needs it)
     -  changed button behavior when deleting contacts
     -  added example with _hyperscript
+    -  added gif demo showcasing _hyperscript
 
 ## LICENSE
 
