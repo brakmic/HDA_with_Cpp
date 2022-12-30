@@ -5,10 +5,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>C++ Web Server</title>
+  <!-- jQuery (bootstrap needs it)-->
+  <script src="vendor/jquery-3.6.3.min.js"></script>
   <!-- Bootstrap -->
   <link rel="stylesheet" href="vendor/bootstrap-3.4.1-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="vendor/bootstrap-3.4.1-dist/css/bootstrap-theme.min.css">
   <script src="vendor/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+  <!-- hyperscript -->
+  <script src="vendor/hyperscript.min.js"></script>
   <!-- htmx -->
   <script src="vendor/htmx.min.js"></script>
 </head>
@@ -20,7 +24,7 @@
       <button class="btn btn-primary btn-lg"
       role="button"
         hx-get="/contacts"
-        hx-trigger="click, keyup[ctrlKey && key == 'L' || key == 'l'] from:body"
+        hx-trigger="click"
         hx-target="#main"
         hx-swap="innerHTML">
     Run the app
