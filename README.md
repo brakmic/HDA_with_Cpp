@@ -38,7 +38,7 @@ Believe it or not, but these two utilize the following functionalities:
 
 And not a single line of JavaScript was needed to make it work. This is how powerful hypermedia architecture actually is.
 
-Additionally, we also use [_hyperscript](https://hyperscript.org/), a small library for event handling and DOM manipulation. With it, we can listen and dispatch events, manipulate DOM objects without leaving HTML.
+We also use [_hyperscript](https://hyperscript.org/), a small library for event handling and DOM manipulation. With it, we can listen and dispatch events, manipulate DOM objects without leaving HTML.
 
 Here's an example from this project:
 
