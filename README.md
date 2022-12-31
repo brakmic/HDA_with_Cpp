@@ -184,7 +184,7 @@ cd vcpkg
     In MSYS Bash, the Windows file system is located under /c.
     And your MSYS $HOME folder is located under "home" in your Windows MSYS root folder.
 
-From the `vcpkg` folder, issue the following commands to install equired libraries:
+From the `vcpkg` folder, issue the following commands to install required libraries:
 
 ```bash
 cd vcpkg
