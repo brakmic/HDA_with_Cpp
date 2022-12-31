@@ -271,6 +271,8 @@ Optional arguments:
 -p --port               Port [default: 3000]
 ```
 
+![use_arguments](videos/use_arguments.gif)
+
 ## CHANGELOG
 * 30/12/2022:    
     -  added _hyperscript scripts in index.html
