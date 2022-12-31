@@ -187,7 +187,6 @@ cd vcpkg
 From the `vcpkg` folder, issue the following commands to install required libraries:
 
 ```bash
-cd vcpkg
 ./vcpkg.exe install fmt
 ./vcpkg.exe install brotli
 ./vcpkg.exe install zlib
