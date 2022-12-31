@@ -153,7 +153,7 @@ r = run_command(
         views_dir,
     ),
 )
-message('[ContactNew] ' + r.stdout().strip())
+message('[ContactEdit] ' + r.stdout().strip())
 
 # sources
 sources = [main_cpp]
