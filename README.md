@@ -102,6 +102,11 @@ The following packages are needed:
 
     drogon
     drogon[ctl]
+    fmt
+    argparse
+    brotli
+    zlib
+    openssl
     sqlite3
     soci[core]
     soci[sqlite3]
@@ -187,6 +192,7 @@ cd vcpkg
 From the `vcpkg` folder, issue the following commands to install required libraries:
 
 ```bash
+./vcpkg.exe install argparse
 ./vcpkg.exe install fmt
 ./vcpkg.exe install brotli
 ./vcpkg.exe install zlib
@@ -252,6 +258,18 @@ The web application starts by loading the `index.html` which contains a `div` ta
 There are also three `bootstrap` resources involved, but this is just make the app look better. Bootstrap is not a requirement and can be replaced by any other library or own stylesheets. The same applies to `jQuery` that is included as a bootstrap dependency. Any of those libraries can be safely removed as they don't affect `htmx` or `_hyperscript`.
 
 The web app communicates with the server in a standard request-response fashion. But unlike so many other web apps out there, no JSON is being used. Instead, the server is only sending pieces of HTML code that the client uses to update the current state of the app.
+
+The server program accepts two parameters for setting the IP and Port.
+
+```bash                    
+Usage: demo_web_server [options] 
+
+Optional arguments:
+-h --help               shows help message and exits [default: false]
+-v --version            prints version information and exits [default: false]
+-i --ip-address         Server IP Address [default: "127.0.0.1"]
+-p --port               Port [default: 3000]
+```
 
 ## CHANGELOG
 * 30/12/2022:    
