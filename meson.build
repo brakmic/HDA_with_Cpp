@@ -184,6 +184,7 @@ incdir = include_directories(
         # vcpkg_root / 'packages/boost-container_' + triplet + '/include',
         # vcpkg_root / 'packages/trantor_' + triplet + '/include',
         # vcpkg_root / 'packages/jsoncpp_' + triplet + '/include',
+        vcpkg_root / 'packages/argparse_' + triplet + '/include',
         vcpkg_root / 'packages/fmt_' + triplet + '/include',
         vcpkg_root / 'packages/sqlite3_' + triplet + '/include',
         vcpkg_root / 'packages/soci_' + triplet + '/include',
