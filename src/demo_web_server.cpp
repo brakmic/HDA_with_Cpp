@@ -6,7 +6,7 @@
 #include <string>
 
 int main() {
-  uint port{3000};
+  unsigned int port{3000};
   std::string server{"127.0.0.1"};
   drogon::app().addListener(server, port);
   std::cout << "web server listening on "
