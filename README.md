@@ -91,6 +91,8 @@ And just like we should remove bloat from our frontends [*put any massive JS fra
 ## Setup
 
 ### C++ libraries
+
+#### POSIX (MacOS, Linux etc.)
   
 A few C++ libraries are needed for the compilation to succeed. This project uses [vcpkg](https://vcpkg.io/en/index.html) as its package manager, but you are free to choose any other instead.
 
@@ -106,11 +108,100 @@ The following packages are needed:
 
 The search for them is easy: `vcpkg search PACKAGE_NAME`
 
-Windows users will have to use the `recurse` flag for some of the packages. Fo example: `vcpkg install soci[sqlite3] --recurse`
 
-Windows users will need to manually add the path to `drogon_ctl` binary. `vcpkg` installs it under its default package location, e.g. `C:\SOME_ROOT_PATH\vcpkg\packages\drogon_x64-windows\tools\drogon`
+#### Windows
 
-However, I haven't been able to compile it under Windows as the [MinGW](https://github.com/microsoft/vcpkg/blob/master/docs/users/mingw.md) compiler breaks during the Drogon compilation.
+Windows users will have to setup [MSYS](https://www.msys2.org/) environment first. After the installation, select the `MSYS2 MINGW64` entry in the Windows Start Menu. **Do not use the `MSYS UCRT4` or any other entry!**
+
+* Package installation via MSYS
+
+In the newly opened bash window, enter this command to install the required packages:
+
+`pacman -S git mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake make mingw-w64-x86_64-c-ares mingw-w64-x86_64-jsoncpp mingw-w64-x86_64-openssl`
+
+Check if the compiler is available with `which g++`. You should see a message like this:
+
+```shell
+$ which g++
+/mingw64/bin/g++
+```
+
+You will also need an editor to update the environment paths, so install your preferred one, e.g. `pacman -Sy nano` or `pacman -Sy vim`
+
+Open your `.bash_profile` with `nano .$HOME/.bash_profile` and add these three lines to the end of the file:
+
+
+```bash
+PATH=/mingw64/bin:$PATH
+export VCPKG_DEFAULT_TRIPLET=x64-mingw-static
+export VCPKG_DEFAULT_HOST_TRIPLET=x64-mingw-static
+```
+
+Save & close the file. Reload it with: `source $HOME/.bash_profile` or `. ~/.bash_profile`
+
+The two triplet entries will be needed later to instruct `vcpkg` to use MinGW instead of the default Visual C++ compiler. And as we also want to compile static libraries only, we announce it by using the `static` suffix.
+
+* Compiling Drogon
+
+Unlike other packages, Drogon will not be installed with `vcpkg`. The currently available vcpkg package thows compilation errors, which is the reason why we have to compile it manually.
+
+Clone the Drogon sources and prepare the build environment. The `/c/bin/drogon` path from the example below should be adapted to your local settings. The root of this path (`/c/bin`) must map to an already existing path in the Windows system, e.g. `C:/bin` or any other path of your choosing.
+
+```bash
+git clone https://github.com/drogonframework/drogon --recursive
+mkdir drogon/build
+cd drogon/build
+cmake .. -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX:PATH=/c/bin/drogon
+```
+
+Now compile Drogon with `make -j` and wait until it completes. 
+
+Finally, install Drogon with `make install`.
+
+You should now see a list of folders in `C:/bin/drogon`.
+
+![drogon_dir](images/drogon_dir.png)
+
+* Compiling static libraries
+
+The second step is the installation of a few libraries that will be linked statically. We will use `vcpkg` to compile them all.
+
+From the same bash window, issue the following commands to setup `vcpkg`. 
+
+```bash
+cd $HOME
+git clone https://github.com/microsoft/vcpkg.git
+cd vcpkg
+./bootstrap-vcpkg.bat
+```
+
+*Notice:* 
+    
+    If you pefer to install vcpkg files under different root path, change the first command "cd $HOME" from the script above. 
+
+    For example: cd /c/Users/WINDOWS_USER_NAME
+
+    In MSYS Bash, the Windows file system is located under /c.
+    And your MSYS $HOME folder is located under "home" in your Windows MSYS root folder.
+
+From the `vcpkg` folder, issue the following commands to install equired libraries:
+
+```bash
+cd vcpkg
+./vcpkg.exe install fmt
+./vcpkg.exe install brotli
+./vcpkg.exe install zlib
+./vcpkg.exe install openssl
+./vcpkg.exe install sqlite3
+./vcpkg.exe install soci
+./vcpkg.exe install soci[sqlite3]
+```
+
+Now you can compile this project via PoweShell with `./buildall.ps1`.
+
+But, don't forget to change `vcpkg_root` in `meson.build` first. This path should point at the previously cloned `vcpkg` repository.
+
+![windows_build](videos/windows_build.gif)
 
 ### C++ build system
 
