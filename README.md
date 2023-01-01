@@ -107,7 +107,7 @@ The book's example backend source code is written in Python and it can be used i
 
 But as `htmx` is very language agnostic, there is no problem of using any language whatsoever, so I used C++. This is also good from the learning perspective as it forces me to double check everything.
 
-I think that we should remove bloat not only from our frontends [*put any massive JS framework in here*], but also from our backends [*put any massive backend framework in here*]. Massive software consumes massive amounts of time and energy. **Human** time and energy, but also **CPU** cycles and electricity.
+I think that we should remove bloat not only from our frontends [*put any massive JS framework in here*], but also from our backends [*put any massive backend framework in here*]. Massive software consumes massive amounts of time and energy. **Human** time and energy as well as **CPU** cycles and electricity.
 
 ## Setup
 
