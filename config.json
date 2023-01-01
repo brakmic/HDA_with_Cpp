@@ -27,7 +27,8 @@
       "xml",
       "mp4",
       "webp",
-      "woff2"
+      "woff2",
+      "ico"
     ],
     "use_brotli": true,
     "log": {
