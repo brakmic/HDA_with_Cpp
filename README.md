@@ -17,6 +17,8 @@
 - [Application architecture](#application-architecture)
 - [Project structure](#project-structure)
 - [Hypermedia-driven app](#hypermedia-driven-app)
+  - [Program arguments](#program-arguments)
+  - [Drogon configuration file](#drogon-configuration-file)
 - [CHANGELOG](#changelog)
 - [LICENSE](#license)
 
@@ -282,6 +284,8 @@ There are also three `bootstrap` resources involved, but this is just make the a
 
 The web app communicates with the server in a standard request-response fashion. But unlike so many other web apps out there, no JSON is being used. Instead, the server is only sending pieces of HTML code that the client uses to update the current state of the app.
 
+### Program arguments
+
 The server program accepts two parameters for setting the IP and Port.
 
 ```bash                    
@@ -295,6 +299,10 @@ Optional arguments:
 ```
 
 ![use_arguments](videos/use_arguments.gif)
+
+### Drogon configuration file
+
+You can also use the included Drogon's `config.json` to control the behavior of the server. As Drogon offers [lots of options](https://github.com/drogonframework/drogon/blob/master/config.example.json), you should first [make yourself familiar with it](https://github.com/drogonframework/drogon-docs/blob/master/ENG-10-Configuration-File.md). The configuration file in this project contains only a few settings.
 
 ## CHANGELOG
 * 30/12/2022:    
@@ -312,6 +320,8 @@ Optional arguments:
     -  updated index.html
     -  updated buildall.ps1
     -  updated meson.build
+    -  included Drogon's config.json
+    -  use Drogon's AOP to display active Listeners
 
 ## LICENSE
 
