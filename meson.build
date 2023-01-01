@@ -40,6 +40,9 @@ vendor_dir = 'vendor'
 # gifs
 videos_dir = 'videos'
 
+# favicon
+favicon_path = 'cpp_favicon.ico'
+
 db_dir = src_root / 'database'
 controllers_dir = src_root / 'controllers'
 models_dir = src_root / 'models'
@@ -363,6 +366,14 @@ if os != 'windows'
         '-r',
         join_paths(meson.source_root(), videos_dir),
         join_paths(meson.build_root(), videos_dir),
+    )
+
+    # copy favicon to build directory
+    run_command(
+        copy,
+        '-r',
+        join_paths(meson.source_root(), favicon_path),
+        join_paths(meson.build_root(), favicon_path),
     )
 endif
 
