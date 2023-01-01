@@ -339,6 +339,13 @@ if os != 'windows'
         join_paths(meson.build_root(), 'index.html'),
     )
 
+    # copy styles.css to build directory
+    run_command(
+        copy,
+        join_paths(meson.source_root(), 'styles.css'),
+        join_paths(meson.build_root(), 'styles.css'),
+    )
+
     # copy vendor sources to build directory
     run_command(
         copy,
