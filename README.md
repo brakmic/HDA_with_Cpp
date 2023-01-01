@@ -235,9 +235,11 @@ My build system of choice is [Meson](https://mesonbuild.com/), because `Makefile
 
 There are two scripts, `buildall.sh` (macOS/Linux) and `buildall.ps1` (Windows). With these two the following steps will be executed:
 
-* Configure Meson build environment
-* Convert Drogon's CSP files into C++ source files and puts them into the `views` directory
-* Compile the application and put the binary into `builddir`
+* Copy `index.html` and `vendor` into `builddir` (*only on Windows, in macOS/Linux this will be done by Meson*)
+* Initialize and run Meson:
+   * use `drogon_ctl` to convert CSPs into C++ source files and put them into `src/views`
+   * compile sources from `src`
+   * put the output binary into `builddir`
 
 A C++20 compiler is needed. I'm using GNU C++ v12.1.0.
 
