@@ -1,0 +1,39 @@
+{
+  // in this JSON file comments are allowed
+  "listeners": [
+    {
+      "address": "127.0.0.1",
+      "port": 3000,
+      "https": false
+    }
+  ],
+  "app": {
+    "document_root": "./builddir",
+    "number_of_threads": 0, // use 0 to get as many threads as there are CPUs
+    "static_files_cache_time": 30,
+    // "sendfile_max_size": "10M", this has no effect until PR #1466 gets merged (https://github.com/drogonframework/drogon/pull/1466)
+    "file_types": [
+      "gif",
+      "png",
+      "jpg",
+      "js",
+      "css",
+      "html",
+      "ico",
+      "swf",
+      "xap",
+      "apk",
+      "cur",
+      "xml",
+      "mp4",
+      "webp",
+      "woff2"
+    ],
+    "use_brotli": true,
+    "log": {
+      "log_size_limit": 100000000,
+      "log_level": "DEBUG" // use TRACE for extra log info
+  }
+  }
+  
+}
