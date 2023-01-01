@@ -24,11 +24,11 @@ int main(int argc, char* argv[]) {
 
   program.add_argument("-i", "--ip-address")
       .help("Server IP Address")
-      .default_value(std::string{});
+      .default_value(std::string{"127.0.0.1"});
 
   program.add_argument("-p", "--port")
       .help("Port")
-      .default_value<unsigned int>(0)
+      .default_value<unsigned int>(3000)
       .scan<'d', unsigned int>();
 
   program.parse_args(argc, argv);
