@@ -37,6 +37,9 @@ vcpkg_root = '/Users/brakmic/projects/vcpkg'
 # vendor sources (htmx, bootstrap)
 vendor_dir = 'vendor'
 
+# gifs
+videos_dir = 'videos'
+
 db_dir = src_root / 'database'
 controllers_dir = src_root / 'controllers'
 models_dir = src_root / 'models'
@@ -352,6 +355,14 @@ if os != 'windows'
         '-r',
         join_paths(meson.source_root(), vendor_dir),
         join_paths(meson.build_root(), vendor_dir),
+    )
+
+    # copy gifs to build directory
+    run_command(
+        copy,
+        '-r',
+        join_paths(meson.source_root(), videos_dir),
+        join_paths(meson.build_root(), videos_dir),
     )
 endif
 
