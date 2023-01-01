@@ -233,11 +233,11 @@ But, don't forget to change `vcpkg_root` in `meson.build` first. This path shoul
 
 My build system of choice is [Meson](https://mesonbuild.com/), because `Makefiles` are hard to maintain and I simply don't want to learn how to use `CMake`. Life is too short for user-hostile software.
 
-There is a small bash script, `buildall.sh`, available that:
+There are two scripts, `buildall.sh` (macOS/Linux) and `buildall.ps1` (Windows). With these two the following steps will be executed:
 
-* Configures Meson build environment
-* Converts Drogon's CSP files into C++ source files and puts them into the `views` directory
-* Compiles the application and puts the binary into `builddir`
+* Configure Meson build environment
+* Convert Drogon's CSP files into C++ source files and puts them into the `views` directory
+* Compile the application and put the binary into `builddir`
 
 A C++20 compiler is needed. I'm using GNU C++ v12.1.0.
 
