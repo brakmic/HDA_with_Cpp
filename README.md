@@ -245,8 +245,8 @@ A C++20 compiler is needed. I'm using GNU C++ v12.1.0.
 
 Before trying to build the project, please, adapt these two variables in the `meson.build` file:
 
-* triplet
-* vcpkg_root
+* [triplet](meson.build#L26)
+* [vcpkg_root](meson.build#L34)
 
 The `triplet` carries the information about the host machine, e.g. `x64-osx`.
 
