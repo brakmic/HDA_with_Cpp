@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 
   program.add_argument("-p", "--port")
       .help("Port")
-      .default_value<unsigned int>(3000)
+      .default_value<unsigned int>(8082)
       .scan<'d', unsigned int>();
 
   program.parse_args(argc, argv);
