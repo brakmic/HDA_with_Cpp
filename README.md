@@ -235,7 +235,7 @@ My build system of choice is [Meson](https://mesonbuild.com/), because `Makefile
 
 There are two scripts, `buildall.sh` (macOS/Linux) and `buildall.ps1` (Windows). With these two the following steps will be executed:
 
-* Copy `index.html` and `vendor` into `builddir` (*only on Windows, in macOS/Linux this will be done by Meson*)
+* Copy `index.html`, `styles.css`, and `vendor` folder into `builddir` (*only on Windows, in macOS/Linux this will be done by Meson*)
 * Initialize and run Meson:
    * use `drogon_ctl` to convert CSPs into C++ source files and put them into `src/views`
    * compile sources from `src`
@@ -307,6 +307,11 @@ Optional arguments:
     -  Windows compilation support
 * 01/01/2023:
     -  added TOC to README
+    -  added FontAwesome
+    -  added style.css
+    -  updated index.html
+    -  updated buildall.ps1
+    -  updated meson.build
 
 ## LICENSE
 

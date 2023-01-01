@@ -1,35 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>C++ Web Server</title>
-  <!-- jQuery (bootstrap needs it)-->
-  <script src="vendor/jquery-3.6.3.min.js"></script>
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="vendor/bootstrap-3.4.1-dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="vendor/bootstrap-3.4.1-dist/css/bootstrap-theme.min.css">
-  <script src="vendor/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
-  <!-- hyperscript -->
-  <script src="vendor/hyperscript.min.js"></script>
-  <!-- htmx -->
-  <script src="vendor/htmx.min.js"></script>
-</head>
-<body>
-  <div id="main" class="container">
-    <div class="jumbotron">
-      <h2>Hypermedia-driven apps</h2>
-      <p>This is an example web app built with <strong>htmx</strong> and <strong>Drogon C++ web framework</strong>.</p>
-      <button class="btn btn-primary btn-lg"
-      role="button"
-        hx-get="/contacts"
-        hx-trigger="click"
-        hx-target="#main"
-        hx-swap="innerHTML">
-    Run the app
-  </button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C++ Web Server</title>
+    <!-- Bootstrap -->
+    <link
+      rel="stylesheet"
+      href="vendor/bootstrap-3.4.1-dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="vendor/bootstrap-3.4.1-dist/css/bootstrap-theme.min.css"
+    />
+    <link rel="stylesheet" href="vendor/fontawesome-free-6.2.1-web/css/fontawesome.min.css"/>
+    <link rel="stylesheet" href="vendor/fontawesome-free-6.2.1-web/css/brands.min.css"/>
+    <link rel="stylesheet" href="vendor/fontawesome-free-6.2.1-web/css/solid.min.css"/>
+    <!-- own styles -->
+    <link rel="stylesheet" href="styles.css"/>
+  </head>
+  <body>
+    <div id="main" class="container">
+      <div class="jumbotron">
+        <div class="row">
+          <div class="col-md-12 col-md-offset-1">
+            <h1>Hypermedia-driven web apps</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  HDAs with <strong>htmx</strong> and
+                  <strong>Drogon C++ web framework</strong>
+                </h4>
+              </div>
+              <div class="panel-body">
+                <figure class="figure">
+                  <img
+                    class="figure-img img-fluid rounded"
+                    width="630"
+                    src="videos/htmx_with_cpp.gif"
+                  />
+                  <figcaption class="figure-caption"></figcaption>
+                </figure>
+              </div>
+              <!-- panel body -->
+            </div>
+            <!-- panel -->
+          </div>
+          <!-- div col -->
+        </div>
+        <!-- div row -->
+        <div class="row">
+          <div class="col-md-12 col-md-offset-4">
+          <a
+            class="btn btn-success btn-lg"
+            role="button"
+            href="https://github.com/brakmic/HDA-Demo"
+          ><i class="fa-brands fa-square-github fa-lg"></i>
+            Get sources
+            </a>
+          <button
+            class="btn btn-primary btn-lg"
+            role="button"
+            hx-get="/contacts"
+            hx-trigger="click"
+            hx-target="#main"
+            hx-swap="innerHTML"
+          ><i class="fa-solid fa-cloud-bolt fa-lg"></i>
+            Run demo
+            
+          </button>
+          <!-- col -->
+        </div>
+        <!-- row -->
+      </div>
+      <!-- jumbotron -->
     </div>
-</div>
-</body>
+    <!-- jQuery & Bootstrap-->
+    <script src="vendor/jquery-3.6.3.min.js"></script>
+    <script src="vendor/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+    <!-- hyperscript -->
+    <script src="vendor/hyperscript.min.js"></script>
+    <!-- htmx -->
+    <script src="vendor/htmx.min.js"></script>
+  </body>
 </html>
