@@ -1,4 +1,5 @@
 builddir/
 uploads/
 .vscode/
+src/views
 .DS_Store
