@@ -4,15 +4,16 @@
 
 - [Introduction](#introduction)
   - [htmx](#htmx)
-  - [Hyperscript](#hyperscript)
+  - [\_hyperscript](#_hyperscript)
   - [Why C++ for the backend?](#why-c-for-the-backend)
 - [Setup](#setup)
-  - [C++ libraries](#c-libraries)
-    - [MacOS, Linux](#macos-linux)
-    - [Windows](#windows)
-    - [Package installation with MSYS](#package-installation-with-msys)
-  - [Compiling Drogon](#compiling-drogon)
-  - [Build system](#build-system)
+  - [MacOS, Linux](#macos-linux)
+  - [Windows](#windows)
+    - [MSYS](#msys)
+    - [Build system](#build-system)
+    - [Drogon](#drogon)
+    - [Static libraries](#static-libraries)
+  - [Meson](#meson)
 - [Application architecture](#application-architecture)
 - [Project structure](#project-structure)
 - [Hypermedia-driven app](#hypermedia-driven-app)
@@ -59,7 +60,7 @@ Believe it or not, but these two utilize the following functionalities:
 
 And not a single line of JavaScript was needed to make it work. This is how powerful hypermedia architecture actually is.
 
-### Hyperscript
+### _hyperscript
 
 We also use [_hyperscript](https://hyperscript.org/), a small library for event handling and DOM manipulation. With it, we can listen to and dispatch events, manipulate DOM objects, all without leaving HTML.
 
@@ -110,9 +111,7 @@ And just like we should remove bloat from our frontends [*put any massive JS fra
 
 ## Setup
 
-### C++ libraries
-
-#### MacOS, Linux
+### MacOS, Linux
   
 A few C++ libraries are needed for the compilation to succeed. This project uses [vcpkg](https://vcpkg.io/en/index.html) as its package manager, but you are free to choose any other instead.
 
@@ -134,11 +133,13 @@ The following packages are needed:
 The search for them is easy: `vcpkg search PACKAGE_NAME`
 
 
-#### Windows
+### Windows
+
+#### MSYS
 
 Windows users will have to setup [MSYS](https://www.msys2.org/) environment first. After the installation, select the `MSYS2 MINGW64` entry in the Windows Start Menu. **Do not use the `MSYS UCRT4` or any other entry!**
 
-#### Package installation with MSYS
+#### Build system
 
 In the newly opened bash window, enter this command to install the required packages:
 
@@ -166,7 +167,7 @@ Save & close the file. Reload it with: `source $HOME/.bash_profile` or `. ~/.bas
 
 The two triplet entries will be needed later to instruct `vcpkg` to use MinGW instead of the default Visual C++ compiler. And as we also want to compile static libraries only, we announce it by using the `static` suffix.
 
-### Compiling Drogon
+#### Drogon
 
 Unlike other packages, Drogon will not be installed with `vcpkg`. The currently available vcpkg package thows compilation errors, which is the reason why we have to compile it manually.
 
@@ -187,7 +188,7 @@ You should now see a list of folders in `C:/bin/drogon`.
 
 ![drogon_dir](images/drogon_dir.png)
 
-* Compiling static libraries
+#### Static libraries
 
 The second step is the installation of a few libraries that will be linked statically. We will use `vcpkg` to compile them all.
 
@@ -228,7 +229,7 @@ But, don't forget to change `vcpkg_root` in `meson.build` first. This path shoul
 
 ![windows_build](videos/windows_build.gif)
 
-### Build system
+### Meson
 
 My build system of choice is [Meson](https://mesonbuild.com/), because `Makefiles` are hard to maintain and I simply don't want to learn how to use `CMake`. Life is too short for user-hostile software.
 
