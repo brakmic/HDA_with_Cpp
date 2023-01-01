@@ -1,21 +1,26 @@
-- [A hypermedia-driven app based on htmx and Drogon C++ web framework](#a-hypermedia-driven-app-based-on-htmx-and-drogon-c-web-framework)
+### Hypermedia-driven app built with **htmx** and **C++**
+
+![htmx_with_cpp](videos/htmx_with_cpp.gif)
+
+- [Introduction](#introduction)
   - [htmx](#htmx)
   - [Hyperscript](#hyperscript)
-    - [A few words regarding the usage of C++ for the backend.](#a-few-words-regarding-the-usage-of-c-for-the-backend)
+  - [Why C++ for the backend?](#why-c-for-the-backend)
 - [Setup](#setup)
   - [C++ libraries](#c-libraries)
-    - [POSIX (MacOS, Linux etc.)](#posix-macos-linux-etc)
+    - [MacOS, Linux](#macos-linux)
     - [Windows](#windows)
-  - [C++ build system](#c-build-system)
+    - [Package installation with MSYS](#package-installation-with-msys)
+  - [Compiling Drogon](#compiling-drogon)
+  - [Build system](#build-system)
 - [Application architecture](#application-architecture)
 - [Project structure](#project-structure)
-- [HTML / Web App](#html--web-app)
+- [Hypermedia-driven app](#hypermedia-driven-app)
 - [CHANGELOG](#changelog)
 - [LICENSE](#license)
 
-## A hypermedia-driven app based on htmx and Drogon C++ web framework
-
-![htmx_with_cpp](videos/htmx_with_cpp.gif)
+-----
+## Introduction
 
 This repository contains an [HDA](https://htmx.org/essays/hypermedia-driven-applications/) based on [htmx](https://htmx.org/) (frontend) and [Drogon C++ framework](https://drogon.org/) (backend). 
 
@@ -95,7 +100,7 @@ Instead of sending JSONs back and forth (*and each time parsing them according t
 
 -----
 
-#### A few words regarding the usage of C++ for the backend.
+### Why C++ for the backend?
 
 The book's example backend source code is written in Python and it can be used instead of C++. In fact, I have tried to mimic the original Python APIs, so that there should be no big gaps in understanding them both. I was writing the C++ code while reading the respective chapters.
 
@@ -107,7 +112,7 @@ And just like we should remove bloat from our frontends [*put any massive JS fra
 
 ### C++ libraries
 
-#### POSIX (MacOS, Linux etc.)
+#### MacOS, Linux
   
 A few C++ libraries are needed for the compilation to succeed. This project uses [vcpkg](https://vcpkg.io/en/index.html) as its package manager, but you are free to choose any other instead.
 
@@ -133,7 +138,7 @@ The search for them is easy: `vcpkg search PACKAGE_NAME`
 
 Windows users will have to setup [MSYS](https://www.msys2.org/) environment first. After the installation, select the `MSYS2 MINGW64` entry in the Windows Start Menu. **Do not use the `MSYS UCRT4` or any other entry!**
 
-* Package installation via MSYS
+#### Package installation with MSYS
 
 In the newly opened bash window, enter this command to install the required packages:
 
@@ -161,7 +166,7 @@ Save & close the file. Reload it with: `source $HOME/.bash_profile` or `. ~/.bas
 
 The two triplet entries will be needed later to instruct `vcpkg` to use MinGW instead of the default Visual C++ compiler. And as we also want to compile static libraries only, we announce it by using the `static` suffix.
 
-* Compiling Drogon
+### Compiling Drogon
 
 Unlike other packages, Drogon will not be installed with `vcpkg`. The currently available vcpkg package thows compilation errors, which is the reason why we have to compile it manually.
 
@@ -223,7 +228,7 @@ But, don't forget to change `vcpkg_root` in `meson.build` first. This path shoul
 
 ![windows_build](videos/windows_build.gif)
 
-### C++ build system
+### Build system
 
 My build system of choice is [Meson](https://mesonbuild.com/), because `Makefiles` are hard to maintain and I simply don't want to learn how to use `CMake`. Life is too short for user-hostile software.
 
@@ -266,7 +271,7 @@ The database in use is SQLite3 but it can be replaced easily with any other SQL 
 * `templates` contains [CSPs](https://github.com/drogonframework/drogon-docs/blob/master/ENG-06-View.md) (C++ Server Pages), which are templates that `drogon_ctl` uses to generate C++ sources. These sources will be used to create HTML outputs.
 * `views` contains Drogon-generated C++ classes. These files **should not be edited manually**. They will be replaced on every build. To change their behavior or contents, use CSPs from `templates` folder instead.
 
-## HTML / Web App
+## Hypermedia-driven app
 
 The web application starts by loading the `index.html` which contains a `div` tag with *id="main"*. Throughout the app, this tag will be used by other controls to dynamically replace its contents without any page refreshes. However, unlike other typical `modern` web apps, we use no JS frameworks like React or Angular to make the app responsive. Instead, we only use `htmx` as our scripting library.
 
