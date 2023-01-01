@@ -1,3 +1,18 @@
+- [A hypermedia-driven app based on htmx and Drogon C++ web framework](#a-hypermedia-driven-app-based-on-htmx-and-drogon-c-web-framework)
+  - [htmx](#htmx)
+  - [Hyperscript](#hyperscript)
+    - [A few words regarding the usage of C++ for the backend.](#a-few-words-regarding-the-usage-of-c-for-the-backend)
+- [Setup](#setup)
+  - [C++ libraries](#c-libraries)
+    - [POSIX (MacOS, Linux etc.)](#posix-macos-linux-etc)
+    - [Windows](#windows)
+  - [C++ build system](#c-build-system)
+- [Application architecture](#application-architecture)
+- [Project structure](#project-structure)
+- [HTML / Web App](#html--web-app)
+- [CHANGELOG](#changelog)
+- [LICENSE](#license)
+
 ## A hypermedia-driven app based on htmx and Drogon C++ web framework
 
 ![htmx_with_cpp](videos/htmx_with_cpp.gif)
@@ -280,6 +295,10 @@ Optional arguments:
     -  changed button behavior when deleting contacts
     -  added example with _hyperscript
     -  added gif demo showcasing _hyperscript
+* 31/12/2022:
+    -  Windows compilation support
+* 01/01/2023:
+    -  added TOC to README
 
 ## LICENSE
 
