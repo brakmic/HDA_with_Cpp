@@ -33,6 +33,9 @@ endif
 src_root = 'src'
 # change to your vcpkg root
 vcpkg_root = '/Users/brakmic/projects/vcpkg'
+if os == 'windows'
+    vcpkg_root = 'C:/Users/Administrator/projects/vcpkg'
+endif
 
 # vendor sources (htmx, bootstrap)
 vendor_dir = 'vendor'
