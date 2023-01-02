@@ -6,6 +6,8 @@
 #include <iostream>
 #include <string>
 
+#include "../server/server_config.hpp"
+
 /// @brief Will be executed after drogon::app().run().
 /// more info:
 /// https://github.com/drogonframework/drogon-docs/blob/master/ENG-12-AOP-Aspect-Oriented-Programming.md
@@ -20,6 +22,8 @@ void displayNetworkInfo() {
 }
 
 int main(int argc, char* argv[]) {
+  ServerConfig config{};
+
   argparse::ArgumentParser program("demo_web_server", "0.0.1");
 
   program.add_argument("-i", "--ip-address")
