@@ -1,0 +1,6 @@
+{
+  "database": {
+    "type": "sqlite3",
+    "file": "demo.db"
+  }
+}
