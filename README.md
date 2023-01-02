@@ -304,7 +304,7 @@ meson -Dprefix=c:/bin/criterion build
 ninja -C build install
 ```
 
-The installation directory prefix can be changed. After the installation completed, set the path to Criterion's DLL file. This DLL will be used by test executables that have Criterion linked.
+The installation directory prefix can be changed. After the installation is completed, set the path to Criterion's DLL file. This DLL will be used by test executables that have Criterion linked.
 
 ![criterion_dll_path](images/criterion_dll_path.png)
 
