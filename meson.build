@@ -16,9 +16,13 @@ cpp_args = [
     '-Wsign-conversion',
     '-D_FORTIFY_SOURCE=2',
     '-D__STDC_LIMIT_MACROS',
+    '-std=c++20',
+]
+
+cpp_args_debug = [
+    cpp_args,
     '-g3',
     '-ggdb',
-    '-std=c++20',
 ]
 
 os = host_machine.system()
@@ -31,6 +35,7 @@ if os == 'windows'
 endif
 
 src_root = 'src'
+test_root = 'test'
 # change to your vcpkg root
 vcpkg_root = '/Users/brakmic/projects/vcpkg'
 if os == 'windows'
@@ -49,16 +54,19 @@ favicon_path = 'cpp_favicon.ico'
 db_dir = src_root / 'database'
 controllers_dir = src_root / 'controllers'
 models_dir = src_root / 'models'
+server_dir = src_root / 'server'
 dtos_dir = src_root / 'dtos'
 views_dir = src_root / 'views'
 view_templates_dir = src_root / 'templates'
 
 main_cpp = src_root / 'demo_web_server.cpp'
+test_main_cpp = test_root / 'test_demo_web_server.cpp'
 controllers_src = [
     controllers_dir / 'home/home.cpp',
     controllers_dir / 'contacts/contacts.cpp',
 ]
 db_src = db_dir / 'db_mgr.cpp'
+server_src = [server_dir / 'server_config.cpp']
 dtos_src = [dtos_dir / 'contact_dto.cpp']
 views_src = [
     views_dir / 'contact.cc',
@@ -80,6 +88,23 @@ project_includes = join_paths(meson.source_root(), 'include')
 jsoncpp_includes = join_paths(mingw_root, 'include')
 mingw_libs = join_paths(mingw_root, 'lib')
 drogon_libs = join_paths(drogon_root, 'lib')
+
+#--------------------------
+# Criterion test framework
+#--------------------------
+# Windows notice:
+# Build it locally with: 
+# > meson -Dprefix=c:/bin/criterion build
+# > ninja -C build install
+# 
+# macOs & Linux users can install it with:
+# $ brew install criterion
+criterion_root = '/usr/local/opt/criterion'
+if os == 'windows'
+    criterion_root = 'C:/bin/criterion'
+endif
+criterion_includes = join_paths(criterion_root, 'include')
+criterion_libs = join_paths(criterion_root, 'lib')
 
 if os != 'windows'
     drogon_root = '/usr/local/bin'
@@ -168,8 +193,12 @@ message('[ContactEdit] ' + r.stdout().strip())
 sources = [main_cpp]
 sources += controllers_src
 sources += db_src
+sources += server_src
 sources += views_src
 sources += dtos_src
+
+# test sources
+test_sources = [test_main_cpp]
 
 # includes
 incdir = include_directories(
@@ -189,6 +218,9 @@ incdir = include_directories(
         vcpkg_root / 'packages/soci_' + triplet + '/include',
     ],
 )
+
+test_incdir = [criterion_includes]
+
 # find libraries
 cpp = meson.get_compiler('cpp')
 libdrogon = cpp.find_library(
@@ -337,6 +369,15 @@ if os == 'windows'
     libcrypt32 = cpp.find_library('crypt32', dirs: [mingw_libs])
 endif
 
+# Criterion test library
+
+libcriterion_name = 'criterion'
+libcriterion = cpp.find_library(
+    libcriterion_name,
+    dirs: [criterion_libs],
+)
+
+
 # Will be done only in POSIX systems. On Windows, the files will be 
 # copied by the powershell script itself.
 if os != 'windows'
@@ -413,7 +454,7 @@ if os == 'windows'
     link_args = ['-lws2_32', '-lssl', '-lcrypto', '-lrpcrt4', '-lcrypt32']
 endif
 
-exe = executable(
+executable(
     'demo_web_server',
     sources,
     cpp_args: cpp_args,
@@ -423,4 +464,16 @@ exe = executable(
     dependencies: deps,
 )
 
-test('basic', exe)
+test_deps = [deps, libcriterion]
+
+test_exe = executable(
+    'test_demo_web_server',
+    test_sources,
+    cpp_args: cpp_args_debug,
+    link_args: link_args,
+    install: true,
+    include_directories: [test_incdir],
+    dependencies: [test_deps],
+)
+
+test('basic', test_exe)
