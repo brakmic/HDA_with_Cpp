@@ -16,9 +16,13 @@
   - [Meson](#meson)
 - [Application architecture](#application-architecture)
 - [Project structure](#project-structure)
+- [Tests](#tests)
+  - [macOS / Linux](#macos--linux)
+  - [Windows](#windows-1)
 - [Hypermedia-driven app](#hypermedia-driven-app)
   - [Program arguments](#program-arguments)
   - [Drogon configuration file](#drogon-configuration-file)
+  - [Web Server configuration file](#web-server-configuration-file)
 - [CHANGELOG](#changelog)
 - [LICENSE](#license)
 
@@ -276,6 +280,60 @@ The database in use is SQLite3 but it can be replaced easily with any other SQL 
 * `templates` contains [CSPs](https://github.com/drogonframework/drogon-docs/blob/master/ENG-06-View.md) (C++ Server Pages), which are templates that `drogon_ctl` uses to generate C++ sources. These sources will be used to create HTML outputs.
 * `views` contains Drogon-generated C++ classes. These files **should not be edited manually**. They will be replaced on every build. To change their behavior or contents, use CSPs from `templates` folder instead.
 
+## Tests
+
+Tests are done with the [Criterion](https://github.com/Snaipe/Criterion) library. 
+
+### macOS / Linux
+
+Criterion can be installed via `brew install criterion`. Otherwise, you can manually build it as described [here](https://criterion.readthedocs.io/en/latest/setup.html#installation).
+
+### Windows
+
+To build Criterion with `Meson`, clone its repo first:
+
+```bash
+git clone --recursive https://github.com/Snaipe/Criterion.git
+```
+
+Then issue the following commands:
+
+```powershell
+cd Criterion
+meson -Dprefix=c:/bin/criterion build
+ninja -C build install
+```
+
+The installation directory prefix can be changed. After the installation completed, set the path to Criterion's DLL file. This DLL will be used by test executables that have Criterion linked.
+
+![criterion_dll_path](images/criterion_dll_path.png)
+
+The test sources of this project are located in `test` and are being built automatically by `Meson`. To execute tests, you can use these two options:
+
+```powershell
+PS > meson test -C .\builddir\
+ninja: no work to do.
+ninja: Entering directory `.\builddir'
+ninja: no work to do.
+1/1 basic        OK              0.09s
+
+Ok:                 1
+Expected Fail:      0
+Fail:               0
+Unexpected Pass:    0
+Skipped:            0
+Timeout:            0
+
+Full log written to .\builddir\meson-logs\testlog.txt
+```
+
+Or by directly calling the test executable itself:
+
+```powershell
+PS .\HDA-Demo> .\builddir\test_demo_web_server.exe
+[====] Synthesis: Tested: 1 | Passing: 1 | Failing: 0 | Crashing: 0
+```
+
 ## Hypermedia-driven app
 
 The web application starts by loading the `index.html` which contains a `div` tag with *id="main"*. Throughout the app, this tag will be used by other controls to dynamically replace its contents without any page refreshes. However, unlike other typical `modern` web apps, we use no JS frameworks like React or Angular to make the app responsive. Instead, we only use `htmx` as our scripting library.
@@ -304,6 +362,21 @@ Optional arguments:
 
 You can also use the included Drogon's `config.json` to control the behavior of the server. As Drogon offers [lots of options](https://github.com/drogonframework/drogon/blob/master/config.example.json), you should first [make yourself familiar with it](https://github.com/drogonframework/drogon-docs/blob/master/ENG-10-Configuration-File.md). The configuration file in this project contains only a few settings.
 
+### Web Server configuration file
+
+There also exist a separate JSON-based configuration file,`server_config.json`, that will be used by the web server. Currently, it only defines the location of the SQLite3 file, but it will be expanded in the future.
+
+```json
+{
+  "database": {
+    "type": "sqlite3",
+    "file": "demo.db"
+  }
+}
+```
+
+This file should not be confused with Drogon's own JSON which is named `config.json`. 
+
 ## CHANGELOG
 * 30/12/2022:    
     -  added _hyperscript scripts in index.html
@@ -322,6 +395,11 @@ You can also use the included Drogon's `config.json` to control the behavior of 
     -  updated meson.build
     -  included Drogon's config.json
     -  use Drogon's AOP to display active Listeners
+* 02/01/2023:
+    - added Criterion test library
+    - added server configuration facility
+    - added server configuration JSON
+    - updated README regarding testing
 
 ## LICENSE
 
