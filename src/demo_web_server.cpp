@@ -32,13 +32,13 @@ int main(int argc, char* argv[]) {
 
   program.add_argument("-p", "--port")
       .help("Port")
-      .default_value<unsigned int>(0)
-      .scan<'d', unsigned int>();
+      .default_value<unsigned short>(0)
+      .scan<'d', unsigned short>();
 
   program.parse_args(argc, argv);
 
   auto ip{program.get<std::string>("ip-address")};
-  auto port{program.get<unsigned int>("port")};
+  auto port{program.get<unsigned short>("port")};
 
   if (!ip.empty() && (port > 0)) {
     drogon::app().addListener(ip, port);
