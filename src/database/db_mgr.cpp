@@ -5,10 +5,13 @@
 
 #include <iostream>
 
+#include "../server/server_config.hpp"
+
 using namespace dws::database;
 using namespace dws::models;
 
-DbManager::DbManager() : _db(session(sqlite3, "demo.db")) {}
+DbManager::DbManager()
+    : _db(session(sqlite3, ServerConfig::instance().get("database", "file"))) {}
 
 DbManager::~DbManager() { _db.close(); }
 
