@@ -330,7 +330,7 @@ Full log written to .\builddir\meson-logs\testlog.txt
 Or by directly calling the test executable itself:
 
 ```powershell
-PS .\HDA-Demo> .\builddir\test_demo_web_server.exe
+PS > .\builddir\test_demo_web_server.exe
 [====] Synthesis: Tested: 1 | Passing: 1 | Failing: 0 | Crashing: 0
 ```
 
