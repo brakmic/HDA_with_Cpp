@@ -51,6 +51,10 @@ videos_dir = 'videos'
 # favicon
 favicon_path = 'cpp_favicon.ico'
 
+# config files
+drogon_config = 'config.json'
+server_config = 'server_config.json'
+
 db_dir = src_root / 'database'
 controllers_dir = src_root / 'controllers'
 models_dir = src_root / 'models'
@@ -197,14 +201,25 @@ sources += server_src
 sources += views_src
 sources += dtos_src
 
+#--------------
 # test sources
+#--------------
+# Include those sources that need to be tested.
+# Alternatively, create multiple partial tests
+# to keep binaries smaller.
 test_sources = [test_main_cpp]
+#test_sources += controllers_src
+#test_sources += db_src
+test_sources += server_src
+#test_sources += views_src
+#test_sources += dtos_src
 
 # includes
 incdir = include_directories(
     [
         project_includes,
         db_dir,
+        server_dir,
         models_dir,
         views_dir,
         dtos_dir,
@@ -219,7 +234,7 @@ incdir = include_directories(
     ],
 )
 
-test_incdir = [criterion_includes]
+test_incdir = [incdir, criterion_includes]
 
 # find libraries
 cpp = meson.get_compiler('cpp')
@@ -419,6 +434,22 @@ if os != 'windows'
         join_paths(meson.source_root(), favicon_path),
         join_paths(meson.build_root(), favicon_path),
     )
+
+    # copy Drogon's config.json to build directory
+    run_command(
+        copy,
+        '-r',
+        join_paths(meson.source_root(), drogon_config),
+        join_paths(meson.build_root(), drogon_config),
+    )
+
+    # copy server_config.json to build directory
+    run_command(
+        copy,
+        '-r',
+        join_paths(meson.source_root(), server_config),
+        join_paths(meson.build_root(), server_config),
+    )
 endif
 
 deps = [
@@ -460,7 +491,7 @@ executable(
     cpp_args: cpp_args,
     link_args: link_args,
     install: true,
-    include_directories: [incdir],
+    include_directories: incdir,
     dependencies: deps,
 )
 
@@ -472,8 +503,8 @@ test_exe = executable(
     cpp_args: cpp_args_debug,
     link_args: link_args,
     install: true,
-    include_directories: [test_incdir],
-    dependencies: [test_deps],
+    include_directories: test_incdir,
+    dependencies: test_deps,
 )
 
 test('basic', test_exe)
