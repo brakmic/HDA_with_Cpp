@@ -12,7 +12,7 @@ class Contacts : public drogon::HttpController<Contacts> {
   METHOD_ADD(Contacts::create_new, "/new", Get);
   METHOD_ADD(Contacts::create, "/new", Post);
   METHOD_ADD(Contacts::edit, "/{id}/edit", Get);
-  METHOD_ADD(Contacts::update, "/{id}/edit", Post);
+  METHOD_ADD(Contacts::update, "/{id}/edit", Put);
   METHOD_ADD(Contacts::delete_, "/{id}/delete", Delete);
 
   METHOD_LIST_END

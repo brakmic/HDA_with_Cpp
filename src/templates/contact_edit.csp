@@ -35,7 +35,7 @@
             hx-target="#main"
             hx-swap="innerHTML">Cancel</button>
     <button class="btn btn-primary"
-            hx-post="/contacts/{%contact.ID%}/edit"
+            hx-put="/contacts/{%contact.ID%}/edit"
             hx-include="input"
             hx-target="#main"
             hx-swap="innerHTML">Save</button>
