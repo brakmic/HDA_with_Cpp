@@ -3,6 +3,7 @@
 ![htmx_with_cpp](videos/htmx_with_cpp.gif)
 
 - [Introduction](#introduction)
+    - [Article](#article)
   - [htmx](#htmx)
   - [\_hyperscript](#_hyperscript)
   - [Why C++ for the backend?](#why-c-for-the-backend)
@@ -34,6 +35,11 @@ This repository contains an [HDA](https://htmx.org/essays/hypermedia-driven-appl
 The aim was to create a responsive "web app" without using any of the usual JavaScript frameworks.
 
 The idea for this project came while reading the excellent book [Hypermedia Systems](https://hypermedia.systems/). In it, the authors talk about alternative ways for writing `modern` web applications. Unlike most of the other books on web development, the authors don't rely on any JavaScript framework, but instead go back to the roots of the hypermedia architecture that is `the web` itself.
+
+#### Article
+
+I've also written [an article](https://blog.brakmic.com/writing-hdas-with-htmx-and-c/) about this project and my general motivation to use htmx and C++.
+
 ### htmx
 
 Instead of using JavaScript *to overcome* HTML, a strategy that basically reproduces thick-clients of the 90es, the authors use `htmx` **to augment** it. They make it capable of doing *more* without falling back to clever JavaScript tricks. Of course, JS isn't forbidden and `htmx` itself relies on it for its own development, but JS is not visible as there is no actual need for it.
