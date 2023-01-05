@@ -1,10 +1,3 @@
-<%inc
-#include "../dtos/contact_dto.hpp"
-%>
-<%c++
-    using namespace dws::dtos;
-    auto contact=@@.get<ContactDto>("contact");
-%>
 <div class="row">
 <dv class="col col-md-4">
 <div name="new-contact" class="panel panel-primary">
@@ -14,25 +7,25 @@
      <div class="input-group-prepend">
        <span class="input-group-text">First name</span>
     </div>
-    <input class="form-control" name="firstname" id="firstname" type="text" placeholder="First name" value="{%contact.FirstName%}">
+    <input class="form-control" name="firstname" id="firstname" type="text" placeholder="First name" value="">
   </div>
   <div class="input-group md-3 input-group-sm">
      <div class="input-group-prepend">
        <span class="input-group-text">Last name</span>
     </div>
-    <input class="form-control" name="lastname" id="lastname" type="text" placeholder="Last name" value="{%contact.LastName%}">
+    <input class="form-control" name="lastname" id="lastname" type="text" placeholder="Last name" value="">
   </div>
   <div class="input-group md-3 input-group-sm">
      <div class="input-group-prepend">
        <span class="input-group-text">EMail</span>
     </div>
-    <input class="form-control" name="email" id="email" type="text" placeholder="EMail" value="{%contact.EMail%}">
+    <input class="form-control" name="email" id="email" type="text" placeholder="EMail" value="">
   </div>
   <div class="input-group md-3 input-group-sm">
      <div class="input-group-prepend">
        <span class="input-group-text">Phone</span>
     </div>
-    <input class="form-control" name="phone" id="phone" type="text" placeholder="Phone" value="{%contact.Phone%}">
+    <input class="form-control" name="phone" id="phone" type="text" placeholder="Phone" value="">
   </div>
   <div class="btn-toolbar">
     <button class="btn btn-danger mt-3"
