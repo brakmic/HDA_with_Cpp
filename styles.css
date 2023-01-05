@@ -1,7 +1,7 @@
-.container {
+.app-container {
   overflow-x:hidden;
 }
 
-.jumbotron {
+.app-jumbotron {
   margin-top: 5px; 
 }
