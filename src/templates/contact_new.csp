@@ -5,38 +5,47 @@
     using namespace dws::dtos;
     auto contact=@@.get<ContactDto>("contact");
 %>
-<div name="new-contact">
-<div class="input-group mb-3 input-group-sm">
+<div class="row">
+<dv class="col col-md-4">
+<div name="new-contact" class="panel panel-primary">
+  <div class="panel-heading">Add new contact</div>
+  <div class="panel-body">
+  <div class="input-group md-3 input-group-sm">
      <div class="input-group-prepend">
        <span class="input-group-text">First name</span>
     </div>
     <input class="form-control" name="firstname" id="firstname" type="text" placeholder="First name" value="{%contact.FirstName%}">
   </div>
-  <div class="input-group mb-3 input-group-sm">
+  <div class="input-group md-3 input-group-sm">
      <div class="input-group-prepend">
        <span class="input-group-text">Last name</span>
     </div>
     <input class="form-control" name="lastname" id="lastname" type="text" placeholder="Last name" value="{%contact.LastName%}">
   </div>
-  <div class="input-group mb-3 input-group-sm">
+  <div class="input-group md-3 input-group-sm">
      <div class="input-group-prepend">
        <span class="input-group-text">EMail</span>
     </div>
     <input class="form-control" name="email" id="email" type="text" placeholder="EMail" value="{%contact.EMail%}">
   </div>
-  <div class="input-group mb-3 input-group-sm">
+  <div class="input-group md-3 input-group-sm">
      <div class="input-group-prepend">
        <span class="input-group-text">Phone</span>
     </div>
     <input class="form-control" name="phone" id="phone" type="text" placeholder="Phone" value="{%contact.Phone%}">
   </div>
-    <button class="btn btn-secondary"
+  <div class="btn-toolbar">
+    <button class="btn btn-danger mt-3"
             hx-get="/contacts"
             hx-target="#main"
             hx-swap="innerHTML">Cancel</button>
-    <button class="btn btn-primary"
+    <button class="btn btn-primary mt-3"
             hx-post="/contacts/new"
             hx-include="input"
             hx-target="#main"
             hx-swap="innerHTML">Save</button>
+  </div>
+  </div>
 </div>
+</div>
+</dv>
