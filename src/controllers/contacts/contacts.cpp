@@ -20,9 +20,7 @@ void Contacts::list(const HttpRequestPtr &req,
 
   auto params = req->getParameters();
   if (params.size() > 0) {
-    auto p = *params.begin();
-    std::string column = p.first;
-    std::string value = p.second;
+    const auto &[column, value] = *params.begin();
     auto contact =
         db.get_contacts(fmt::format("{} like '%{}%'", column, value));
     data.insert("contacts", contact);
