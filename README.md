@@ -144,6 +144,8 @@ The following packages are needed:
 
 The search for them is easy: `vcpkg search PACKAGE_NAME`
 
+#### Install extra dependencies when building on Linux
+`sudo apt install uuid-dev libcriterion-dev`
 
 ### Windows
 
