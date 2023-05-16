@@ -29,7 +29,7 @@ os = host_machine.system()
 
 # change this to your own vcgpkg triplet
 # more info: vcpkg help triplet
-triplet = 'x64-osx'
+triplet = 'x64-linux'
 if os == 'windows'
     triplet = 'x64-mingw-static'
 endif
@@ -37,7 +37,7 @@ endif
 src_root = 'src'
 test_root = 'test'
 # change to your vcpkg root
-vcpkg_root = '/Users/brakmic/projects/vcpkg'
+vcpkg_root = '/home/csharpe/Desktop/Local-Development/Hypermedia-Driven-App/vcpkg'
 if os == 'windows'
     vcpkg_root = 'C:/Users/Administrator/projects/vcpkg'
 endif
@@ -107,8 +107,23 @@ criterion_root = '/usr/local/opt/criterion'
 if os == 'windows'
     criterion_root = 'C:/bin/criterion'
 endif
+if os == 'linux'
+    criterion_root = '/usr/include/criterion'
+endif
+
 criterion_includes = join_paths(criterion_root, 'include')
+# A conditional when installing criterion with apt in Ubuntu
+# dpkg -L libcriterion-dev finds where package is installed by default
+if os == 'linux'
+    criterion_includes = '/usr/include/criterion'
+endif
+
 criterion_libs = join_paths(criterion_root, 'lib')
+# A conditional when installing criterion with apt in Ubuntu
+# dpkg -L libcriterion-dev finds where package is installed by default
+if os == 'linux'
+	criterion_libs = '/usr/lib/x86_64-linux-gnu/'
+endif
 
 if os != 'windows'
     drogon_root = '/usr/local/bin'
@@ -483,6 +498,9 @@ endif
 link_args = ''
 if os == 'windows'
     link_args = ['-lws2_32', '-lssl', '-lcrypto', '-lrpcrt4', '-lcrypt32']
+endif
+if os == 'linux'
+    link_args = ['-luuid']
 endif
 
 executable(
