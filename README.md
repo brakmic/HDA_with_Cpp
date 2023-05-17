@@ -409,7 +409,7 @@ This file should not be confused with Drogon's own JSON which is named `config.j
     - added server configuration JSON
     - updated README regarding testing
 * 17/05/2023
-    - fixed problem with building on Linux Ubuntu (patches by @csharpee)
+    - fixed problem with building on Linux Ubuntu (patches by [@csharpee](https://github.com/csharpee))
 
 ## LICENSE
 
