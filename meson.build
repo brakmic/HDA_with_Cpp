@@ -110,6 +110,10 @@ elif os == 'linux'
     # Use system installation on Linux
     criterion_root = '/usr'
 endif
+if os == 'linux'
+    criterion_root = '/usr/include/criterion'
+endif
+
 criterion_includes = join_paths(criterion_root, 'include')
 if os == 'linux'
     criterion_libs = join_paths(criterion_root, 'lib/x86_64-linux-gnu')
@@ -522,6 +526,9 @@ endif
 link_args = ''
 if os == 'windows'
     link_args = ['-lws2_32', '-lssl', '-lcrypto', '-lrpcrt4', '-lcrypt32']
+endif
+if os == 'linux'
+    link_args = ['-luuid']
 endif
 
 executable(
