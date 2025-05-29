@@ -16,7 +16,7 @@ class Home : public drogon::HttpController<Home> {
 
   METHOD_LIST_END
   void get(const HttpRequestPtr& req,
-           std::function<void(const HttpResponsePtr&)>&& callback);
+    std::function<void(const HttpResponsePtr&)>&& callback);
   // your declaration of processing function maybe like this:
   // void get(const HttpRequestPtr& req,std::function<void (const
   // HttpResponsePtr &)> &&callback,int p1,std::string p2); void
