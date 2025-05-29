@@ -1,42 +1,43 @@
-### Hypermedia-driven app built with **htmx** and **C++**
+# Hypermedia-driven app built with **htmx** and **C++**
 
 ![htmx_with_cpp](videos/htmx_with_cpp.gif)
 
-- [Introduction](#introduction)
+- [Hypermedia-driven app built with **htmx** and **C++**](#hypermedia-driven-app-built-with-htmx-and-c)
+  - [Introduction](#introduction)
     - [Article](#article)
-  - [htmx](#htmx)
-  - [\_hyperscript](#_hyperscript)
-  - [Why C++ for the backend?](#why-c-for-the-backend)
-- [Setup](#setup)
-  - [MacOS, Linux](#macos-linux)
-  - [Windows](#windows)
-    - [MSYS](#msys)
-    - [Build system](#build-system)
-    - [Drogon](#drogon)
-    - [Static libraries](#static-libraries)
-  - [Meson](#meson)
-- [Application architecture](#application-architecture)
-- [Project structure](#project-structure)
-- [Tests](#tests)
-  - [macOS / Linux](#macos--linux)
-  - [Windows](#windows-1)
-- [Hypermedia-driven app](#hypermedia-driven-app)
-  - [Program arguments](#program-arguments)
-  - [Drogon configuration file](#drogon-configuration-file)
-  - [Web Server configuration file](#web-server-configuration-file)
-- [CHANGELOG](#changelog)
-- [LICENSE](#license)
+    - [htmx](#htmx)
+    - [\_hyperscript](#_hyperscript)
+    - [Why C++ for the backend?](#why-c-for-the-backend)
+  - [Setup](#setup)
+    - [MacOS, Linux](#macos-linux)
+    - [Windows](#windows)
+      - [MSYS](#msys)
+      - [Build system](#build-system)
+      - [Drogon](#drogon)
+      - [Static libraries](#static-libraries)
+    - [Meson](#meson)
+  - [Application architecture](#application-architecture)
+  - [Project structure](#project-structure)
+  - [Tests](#tests)
+    - [Under macOS / Linux](#under-macos--linux)
+    - [Under Windows](#under-windows)
+  - [Hypermedia-driven app](#hypermedia-driven-app)
+    - [Program arguments](#program-arguments)
+    - [Drogon configuration file](#drogon-configuration-file)
+    - [Web Server configuration file](#web-server-configuration-file)
+  - [LICENSE](#license)
 
 -----
+
 ## Introduction
 
-This repository contains an [HDA](https://htmx.org/essays/hypermedia-driven-applications/) based on [htmx](https://htmx.org/) (frontend) and [Drogon C++ framework](https://drogon.org/) (backend). 
+This repository contains an [HDA](https://htmx.org/essays/hypermedia-driven-applications/) based on [htmx](https://htmx.org/) (frontend) and [Drogon C++ framework](https://drogon.org/) (backend).
 
 The aim was to create a responsive "web app" without using any of the usual JavaScript frameworks.
 
 The idea for this project came while reading the excellent book [Hypermedia Systems](https://hypermedia.systems/). In it, the authors talk about alternative ways for writing `modern` web applications. Unlike most of the other books on web development, the authors don't rely on any JavaScript framework, but instead go back to the roots of the hypermedia architecture that is `the web` itself.
 
-#### Article
+### Article
 
 I've also written [an article](https://blog.brakmic.com/writing-hdas-with-htmx-and-c/) about this project and my general motivation to use htmx and C++.
 
@@ -44,7 +45,7 @@ I've also written [an article](https://blog.brakmic.com/writing-hdas-with-htmx-a
 
 Instead of using JavaScript *to overcome* HTML, a strategy that basically reproduces thick-clients of the 90es, the authors use `htmx` **to augment** it. They make it capable of doing *more* without falling back to clever JavaScript tricks. Of course, JS isn't forbidden and `htmx` itself relies on it for its own development, but JS is not visible as there is no actual need for it.
 
-We don't need to use JS to replace seemingly "insufficient" hypermedia controls, because **htmx** is here to extend them. It makes them capable of doing 
+We don't need to use JS to replace seemingly "insufficient" hypermedia controls, because **htmx** is here to extend them. It makes them capable of doing
 *more* as originally defined. An anchor tag (`<a>`), for example, can be "upgraded" so that it can execute POST, PUT, PATCH, or even DELETE requests. A `<form>` tag doesn't have to be the only hypermedia control for sending data via POST requests. How about writing your own controls that can do exactly the same? Or maybe `<form>`s that can PATCH existing entries on the server? What usually demands explicit JS code can now be done *declaratively* with *upgraded* hypermedia controls.
 
 Here's an example from this project. Two buttons (*Cancel* & *Save*) which can be found in almost every sufficiently complex web app.
@@ -65,10 +66,10 @@ Here's an example from this project. Two buttons (*Cancel* & *Save*) which can b
 
 Believe it or not, but these two utilize the following functionalities:
 
-* Executing AJAX requests.
-* Using HTTP verbs that are usually not available for `<button>` controls.
-* Passing of additional element values in AJAX requests.
-* Transclusion (that is, *where* and *how* to insert the server response data)
+- Executing AJAX requests.
+- Using HTTP verbs that are usually not available for `<button>` controls.
+- Passing of additional element values in AJAX requests.
+- Transclusion (that is, *where* and *how* to insert the server response data)
 
 And not a single line of JavaScript was needed to make it work. This is how powerful hypermedia architecture actually is.
 
@@ -99,9 +100,9 @@ Here's an example from this project:
 
 In the second `<button>` control we have a few bits of _hyperscript that does the following:
 
-* reacts to click events
-* then removes the control with *id=edit-c*
-* then removes the button that reacted to click event (it removes itself)
+- reacts to click events
+- then removes the control with *id=edit-c*
+- then removes the button that reacted to click event (it removes itself)
 
 The final result is the removal of the buttons `Edit` and `Delete`. Only the button `Back` remains.
 
@@ -124,13 +125,14 @@ I think that we should remove bloat not only from our frontends [*put any massiv
 ## Setup
 
 ### MacOS, Linux
-  
+
 A few C++ libraries are needed for the compilation to succeed. This project uses [vcpkg](https://vcpkg.io/en/index.html) as its package manager, but you are free to choose any other instead.
 
 To install a package, simply invoke `vcpkg install PACKAGE_NAME`.
 
 The following packages are needed:
 
+```bash
     drogon
     drogon[ctl]
     fmt
@@ -141,9 +143,10 @@ The following packages are needed:
     sqlite3
     soci[core]
     soci[sqlite3]
+    libuuid
+```
 
 The search for them is easy: `vcpkg search PACKAGE_NAME`
-
 
 ### Windows
 
@@ -168,7 +171,6 @@ You will also need an editor to update the environment paths, so install your pr
 
 Open your `.bash_profile` with `nano .$HOME/.bash_profile` and add these three lines to the end of the file:
 
-
 ```bash
 PATH=/mingw64/bin:$PATH
 export VCPKG_DEFAULT_TRIPLET=x64-mingw-static
@@ -192,7 +194,7 @@ cd drogon/build
 cmake .. -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX:PATH=/c/bin/drogon
 ```
 
-Now compile Drogon with `make -j` and wait until it completes. 
+Now compile Drogon with `make -j` and wait until it completes.
 
 Finally, install Drogon with `make install`.
 
@@ -204,7 +206,7 @@ You should now see a list of folders in `C:/bin/drogon`.
 
 The second step is the installation of a few libraries that will be linked statically. We will use `vcpkg` to compile them all.
 
-From the same bash window, issue the following commands to setup `vcpkg`. 
+From the same bash window, issue the following commands to setup `vcpkg`.
 
 ```bash
 cd $HOME
@@ -213,14 +215,12 @@ cd vcpkg
 ./bootstrap-vcpkg.bat
 ```
 
-*Notice:* 
-    
-    If you pefer to install vcpkg files under different root path, change the first command "cd $HOME" from the script above. 
+*Notice:*
 
-    For example: cd /c/Users/WINDOWS_USER_NAME
-
-    In MSYS Bash, the Windows file system is located under /c.
-    And your MSYS $HOME folder is located under "home" in your Windows MSYS root folder.
+If you pefer to install vcpkg files under different root path, change the first command "cd $HOME" from the script above.
+For example: `cd /c/Users/WINDOWS_USER_NAME`
+In MSYS Bash, the Windows file system is located under `/c`.
+And your MSYS $HOME folder is located under "home" in your Windows MSYS root folder.
 
 From the `vcpkg` folder, issue the following commands to install required libraries:
 
@@ -247,18 +247,18 @@ My build system of choice is [Meson](https://mesonbuild.com/), because `Makefile
 
 There are two scripts, `buildall.sh` (macOS/Linux) and `buildall.ps1` (Windows). With these two the following steps will be executed:
 
-* Copy web files (index.html, styles etc.) to `builddir` (*only on Windows, in macOS/Linux this will be done by Meson*)
-* Initialize and run Meson:
-   * use `drogon_ctl` to convert CSPs into C++ source files and put them into `src/views`
-   * compile sources from `src`
-   * put the output binary into `builddir`
+- Copy web files (index.html, styles etc.) to `builddir` (*only on Windows, in macOS/Linux this will be done by Meson*)
+- Initialize and run Meson:
+  - use `drogon_ctl` to convert CSPs into C++ source files and put them into `src/views`
+  - compile sources from `src`
+  - put the output binary into `builddir`
 
 A C++20 compiler is needed. I'm using GNU C++ v12.1.0.
 
 Before trying to build the project, please, adapt these two variables in the `meson.build` file:
 
-* [triplet](meson.build#L26)
-* [vcpkg_root](meson.build#L34)
+- [triplet](meson.build#L26)
+- [vcpkg_root](meson.build#L34)
 
 The `triplet` carries the information about the host machine, e.g. `x64-osx`.
 
@@ -280,19 +280,19 @@ The database in use is SQLite3 but it can be replaced easily with any other SQL 
 
 ![project_structure](images/project_structure.png)
 
-* `controllers` contains classes that Drogon uses to map client calls to functions in the backend.
-* `database` contains a small wrapper class for accessing the SQLite3 instance.
-* `dtos` contains `Data Transfer Objects` that are used for data tansfers between frontend and backend.
-* `templates` contains [CSPs](https://github.com/drogonframework/drogon-docs/blob/master/ENG-06-View.md) (C++ Server Pages), which are templates that `drogon_ctl` uses to generate C++ sources. These sources will be used to create HTML outputs.
-* `views` contains Drogon-generated C++ classes. These files **should not be edited manually**. They will be replaced on every build. To change their behavior or contents, use CSPs from `templates` folder instead.
+- `controllers` contains classes that Drogon uses to map client calls to functions in the backend.
+- `database` contains a small wrapper class for accessing the SQLite3 instance.
+- `dtos` contains `Data Transfer Objects` that are used for data tansfers between frontend and backend.
+- `templates` contains [CSPs](https://github.com/drogonframework/drogon-docs/blob/master/ENG-06-View.md) (C++ Server Pages), which are templates that `drogon_ctl` uses to generate C++ sources. These sources will be used to create HTML outputs.
+- `views` contains Drogon-generated C++ classes. These files **should not be edited manually**. They will be replaced on every build. To change their behavior or contents, use CSPs from `templates` folder instead.
 
 ## Tests
 
-Tests are done with the [Criterion](https://github.com/Snaipe/Criterion) library. 
+Tests are done with the [Criterion](https://github.com/Snaipe/Criterion) library.
 
 ### macOS / Linux
 
-Criterion can be installed via `brew install criterion`. Otherwise, you can manually build it as described [here](https://criterion.readthedocs.io/en/latest/setup.html#installation).
+Criterion can be installed via `brew install criterion`. Otherwise, you can manually build it as described [on this page](https://criterion.readthedocs.io/en/latest/setup.html#installation).
 
 ### Windows
 
@@ -352,8 +352,8 @@ The web app communicates with the server in a standard request-response fashion.
 
 The server program accepts two parameters for setting the IP and Port.
 
-```bash                    
-Usage: demo_web_server [options] 
+```bash
+Usage: demo_web_server [options]
 
 Optional arguments:
 -h --help               shows help message and exits [default: false]
@@ -381,31 +381,7 @@ There also exist a separate JSON-based configuration file,`server_config.json`, 
 }
 ```
 
-This file should not be confused with Drogon's own JSON which is named `config.json`. 
-
-## CHANGELOG
-* 30/12/2022:    
-    -  added _hyperscript scripts in index.html
-    -  added jQuery in index.html (bootstrap needs it)
-    -  changed button behavior when deleting contacts
-    -  added example with _hyperscript
-    -  added gif demo showcasing _hyperscript
-* 31/12/2022:
-    -  Windows compilation support
-* 01/01/2023:
-    -  added TOC to README
-    -  added FontAwesome
-    -  added style.css
-    -  updated index.html
-    -  updated buildall.ps1
-    -  updated meson.build
-    -  included Drogon's config.json
-    -  use Drogon's AOP to display active Listeners
-* 02/01/2023:
-    - added Criterion test library
-    - added server configuration facility
-    - added server configuration JSON
-    - updated README regarding testing
+This file should not be confused with Drogon's own JSON which is named `config.json`.
 
 ## LICENSE
 
