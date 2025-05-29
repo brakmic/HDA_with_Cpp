@@ -12,7 +12,7 @@ ServerConfig::ServerConfig() {
     }
   } catch (std::exception& e) {
     throw std::runtime_error("Error reading config file " + _configFile + ": " +
-                             e.what());
+    e.what());
   }
 }
 
