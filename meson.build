@@ -29,7 +29,7 @@ os = host_machine.system()
 
 # change this to your own vcgpkg triplet
 # more info: vcpkg help triplet
-triplet = 'x64-osx'
+triplet = 'x64-linux'
 if os == 'windows'
     triplet = 'x64-mingw-static'
 endif
@@ -37,7 +37,7 @@ endif
 src_root = 'src'
 test_root = 'test'
 # change to your vcpkg root
-vcpkg_root = '/Users/brakmic/projects/vcpkg'
+vcpkg_root = '/home/cppdev/vcpkg'
 if os == 'windows'
     vcpkg_root = 'C:/Users/Administrator/projects/vcpkg'
 endif
@@ -96,19 +96,39 @@ drogon_libs = join_paths(drogon_root, 'lib')
 #--------------------------
 # Criterion test framework
 #--------------------------
-# Windows notice:
-# Build it locally with: 
+# Ubuntu/Linux: Use system package (apt install libcriterion-dev)
+# Windows: Build it locally with: 
 # > meson -Dprefix=c:/bin/criterion build
 # > ninja -C build install
 # 
-# macOs & Linux users can install it with:
+# macOs users can install it with:
 # $ brew install criterion
 criterion_root = '/usr/local/opt/criterion'
 if os == 'windows'
     criterion_root = 'C:/bin/criterion'
+elif os == 'linux'
+    # Use system installation on Linux
+    criterion_root = '/usr'
 endif
 criterion_includes = join_paths(criterion_root, 'include')
-criterion_libs = join_paths(criterion_root, 'lib')
+if os == 'linux'
+    criterion_libs = join_paths(criterion_root, 'lib/x86_64-linux-gnu')
+else
+    criterion_libs = join_paths(criterion_root, 'lib')
+endif
+
+# Criterion test library
+if os == 'linux'
+    # Use system package on Linux
+    libcriterion = dependency('criterion', required: true)
+else
+    # Use manual library search for other platforms
+    libcriterion_name = 'criterion'
+    libcriterion = cpp.find_library(
+        libcriterion_name,
+        dirs: [criterion_libs],
+    )
+endif
 
 if os != 'windows'
     drogon_root = '/usr/local/bin'
@@ -279,9 +299,9 @@ libcrypto = cpp.find_library(
     dirs: [libcrypto_path],
 )
 
-brotlicommon_static_name = 'brotlicommon-static'
-if os == 'windows'
-    brotlicommon_static_name = 'brotlicommon'
+brotlicommon_static_name = 'brotlicommon'
+if os == 'osx'
+    brotlicommon_static_name = 'brotlicommon-static'
 endif
 
 brotlicommon_path = vcpkg_root / 'packages/brotli_' + triplet + '/lib/'
@@ -293,9 +313,9 @@ libbrotli_common = cpp.find_library(
     dirs: [brotlicommon_path],
 )
 
-brotlienc_static_name = 'brotlienc-static'
-if os == 'windows'
-    brotlienc_static_name = 'brotlienc'
+brotlienc_static_name = 'brotlienc'
+if os == 'osx'
+    brotlienc_static_name = 'brotlienc-static'
 endif
 
 brotlienc_path = vcpkg_root / 'packages/brotli_' + triplet + '/lib/'
@@ -307,9 +327,9 @@ libbrotli_enc = cpp.find_library(
     dirs: [brotlienc_path],
 )
 
-brotlidec_static_name = 'brotlidec-static'
-if os == 'windows'
-    brotlidec_static_name = 'brotlidec'
+brotlidec_static_name = 'brotlidec'
+if os == 'osx'
+    brotlidec_static_name = 'brotlidec-static'
 endif
 
 brotlidec_path = vcpkg_root / 'packages/brotli_' + triplet + '/lib/'
@@ -374,6 +394,16 @@ if os != 'windows'
     libresolv = cpp.find_library('resolv')
 endif
 
+libuuid = ''
+if os == 'linux'
+    # Use vcpkg UUID library with manual path
+    libuuid = cpp.find_library(
+        'uuid',
+        dirs: [vcpkg_root / 'packages/libuuid_' + triplet + '/lib'],
+        required: true
+    )
+endif
+
 librpcrt4 = ''
 if os == 'windows'
     librpcrt4 = cpp.find_library('rpcrt4', dirs: [mingw_libs])
@@ -385,12 +415,17 @@ if os == 'windows'
 endif
 
 # Criterion test library
-
-libcriterion_name = 'criterion'
-libcriterion = cpp.find_library(
-    libcriterion_name,
-    dirs: [criterion_libs],
-)
+if os == 'linux'
+    # Use system package on Linux
+    libcriterion = dependency('criterion', required: true)
+else
+    # Use manual library search for other platforms
+    libcriterion_name = 'criterion'
+    libcriterion = cpp.find_library(
+        libcriterion_name,
+        dirs: [criterion_libs],
+    )
+endif
 
 
 # Will be done only in POSIX systems. On Windows, the files will be 
@@ -480,6 +515,10 @@ if os != 'windows'
     deps += libresolv
 endif
 
+if os == 'linux'
+    deps += libuuid
+endif
+
 link_args = ''
 if os == 'windows'
     link_args = ['-lws2_32', '-lssl', '-lcrypto', '-lrpcrt4', '-lcrypt32']
@@ -495,7 +534,12 @@ executable(
     dependencies: deps,
 )
 
-test_deps = [deps, libcriterion]
+# Update test dependencies
+if os == 'linux'
+    test_deps = [deps, libcriterion]
+else
+    test_deps = [deps, libcriterion]
+endif
 
 test_exe = executable(
     'test_demo_web_server',
