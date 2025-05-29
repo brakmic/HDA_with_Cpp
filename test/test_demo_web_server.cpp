@@ -10,7 +10,7 @@ ReportHook(PRE_INIT)(struct criterion_test *test) {
 
 ReportHook(POST_TEST)(struct criterion_test_stats *stats) {
   printf("Asserts: [%d passed, %d failed, %d total]\n", stats->passed_asserts,
-         stats->failed_asserts, stats->passed_asserts + stats->failed_asserts);
+    stats->failed_asserts, stats->passed_asserts + stats->failed_asserts);
 }
 
 ReportHook(PRE_ALL)(struct criterion_test_set *tests) {
