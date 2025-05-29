@@ -66,7 +66,7 @@ void Contacts::create(const HttpRequestPtr &req,
     bool success = db.save_contact(c);
     // return all contacts via GET /contacts request
     list(HttpRequest::newHttpRequest(),
-         std::forward<decltype(callback)>(callback));
+    std::forward<decltype(callback)>(callback));
   } else {
     HttpViewData data;
     data.insert("contact", dto);
@@ -101,12 +101,12 @@ void Contacts::update(const HttpRequestPtr &req,
   }
   // return all contacts via GET / contacts request
   list(HttpRequest::newHttpRequest(),
-       std::forward<decltype(callback)>(callback));
+  std::forward<decltype(callback)>(callback));
 }
 
 void Contacts::delete_(const HttpRequestPtr &req,
-                       std::function<void(const HttpResponsePtr &)> &&callback,
-                       unsigned long id) {
+                      std::function<void(const HttpResponsePtr &)> &&callback,
+                      unsigned long id) {
   DbManager db;
   HttpResponsePtr res = HttpResponse::newHttpResponse();
   auto existing = db.get_contact(id);

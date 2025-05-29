@@ -19,8 +19,8 @@ class Contacts : public drogon::HttpController<Contacts> {
   void list(const HttpRequestPtr &req,
             std::function<void(const HttpResponsePtr &)> &&callback);
   void get_by_id(const HttpRequestPtr &req,
-                 std::function<void(const HttpResponsePtr &)> &&callback,
-                 unsigned long id);
+                std::function<void(const HttpResponsePtr &)> &&callback,
+                unsigned long id);
   void create_new(const HttpRequestPtr &req,
                   std::function<void(const HttpResponsePtr &)> &&callback);
   void create(const HttpRequestPtr &req,
@@ -32,6 +32,6 @@ class Contacts : public drogon::HttpController<Contacts> {
               std::function<void(const HttpResponsePtr &)> &&callback,
               unsigned long id);
   void delete_(const HttpRequestPtr &req,
-               std::function<void(const HttpResponsePtr &)> &&callback,
-               unsigned long id);
+              std::function<void(const HttpResponsePtr &)> &&callback,
+              unsigned long id);
 };
