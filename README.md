@@ -9,46 +9,48 @@
     - [\_hyperscript](#_hyperscript)
     - [Why C++ for the backend?](#why-c-for-the-backend)
   - [Setup](#setup)
-    - [MacOS, Linux](#macos-linux)
-    - [Windows](#windows)
-      - [MSYS](#msys)
-      - [Build system](#build-system)
-      - [Drogon](#drogon)
-      - [Static libraries](#static-libraries)
-    - [Meson](#meson)
-  - [Application architecture](#application-architecture)
-  - [Project structure](#project-structure)
-  - [Tests](#tests)
-    - [Under macOS / Linux](#under-macos--linux)
-    - [Under Windows](#under-windows)
-  - [Hypermedia-driven app](#hypermedia-driven-app)
-    - [Program arguments](#program-arguments)
-    - [Drogon configuration file](#drogon-configuration-file)
-    - [Web Server configuration file](#web-server-configuration-file)
-  - [LICENSE](#license)
+    - [Quick Start](#quick-start)
+    - [Dependencies](#dependencies)
+    - [macOS, Linux](#macos-linux)
+    - [Windows — Compiler Choice](#windows--compiler-choice)
+    - [Build System](#build-system)
+  - [Docker](DOCKER.md)
+
+## Quick Docker Start
+
+```bash
+docker build -t hda-with-cpp .
+docker run -p 3000:3000 hda-with-cpp
+```
+
+Open <http://127.0.0.1:3000> in a browser. The image builds Drogon from source,
+compiles the application, and runs the test suite. See [DOCKER.md](DOCKER.md) for
+details on volume mounts, sample data import, and production configuration.
+
+- [Application architecture](#application-architecture)
+- [Project structure](#project-structure)
+- [Tests](#tests)
+- [Hypermedia-driven app](#hypermedia-driven-app)
+  - [Program arguments](#program-arguments)
+  - [Drogon configuration file](#drogon-configuration-file)
+  - [Web Server configuration file](#web-server-configuration-file)
+- [LICENSE](#license)
 
 -----
 
 ## Introduction
 
-This repository contains an [HDA](https://htmx.org/essays/hypermedia-driven-applications/) based on [htmx](https://htmx.org/) (frontend) and [Drogon C++ framework](https://drogon.org/) (backend).
+This repository demonstrates a hypermedia-driven application using [htmx](https://htmx.org/) for the frontend and the [Drogon C++ framework](https://drogon.org/) for the backend. The goal is to build a responsive web application without relying on JavaScript frameworks.
 
-The aim was to create a responsive "web app" without using any of the usual JavaScript frameworks.
-
-The idea for this project came while reading the excellent book [Hypermedia Systems](https://hypermedia.systems/). In it, the authors talk about alternative ways for writing `modern` web applications. Unlike most of the other books on web development, the authors don't rely on any JavaScript framework, but instead go back to the roots of the hypermedia architecture that is `the web` itself.
+The project is inspired by the book [Hypermedia Systems](https://hypermedia.systems/), which presents alternatives to the typical JavaScript-heavy approach. The authors focus on the original hypermedia architecture of the web, using HTML as the primary vehicle for application logic.
 
 ### Article
 
-I've also written [an article](https://blog.brakmic.com/writing-hdas-with-htmx-and-c/) about this project and my general motivation to use htmx and C++.
+See [this article](https://blog.brakmic.com/writing-hdas-with-htmx-and-c/) for background and motivation for using htmx and C++ in this project.
 
 ### htmx
 
-Instead of using JavaScript *to overcome* HTML, a strategy that basically reproduces thick-clients of the 90es, the authors use `htmx` **to augment** it. They make it capable of doing *more* without falling back to clever JavaScript tricks. Of course, JS isn't forbidden and `htmx` itself relies on it for its own development, but JS is not visible as there is no actual need for it.
-
-We don't need to use JS to replace seemingly "insufficient" hypermedia controls, because **htmx** is here to extend them. It makes them capable of doing
-*more* as originally defined. An anchor tag (`<a>`), for example, can be "upgraded" so that it can execute POST, PUT, PATCH, or even DELETE requests. A `<form>` tag doesn't have to be the only hypermedia control for sending data via POST requests. How about writing your own controls that can do exactly the same? Or maybe `<form>`s that can PATCH existing entries on the server? What usually demands explicit JS code can now be done *declaratively* with *upgraded* hypermedia controls.
-
-Here's an example from this project. Two buttons (*Cancel* & *Save*) which can be found in almost every sufficiently complex web app.
+`htmx` extends HTML by enabling features such as AJAX requests, additional HTTP verbs, and declarative updates, all without custom JavaScript. For example, the following buttons handle navigation and form submission:
 
 ```html
 <button hx-get="/contacts"
@@ -60,24 +62,22 @@ Here's an example from this project. Two buttons (*Cancel* & *Save*) which can b
         hx-include="input"
         hx-target="#main"
         hx-swap="innerHTML">
-        Save
+ [Hypermedia-driven app built with **htmx** and **C++**](#hypermedia-driven-app-built-with-htmx-and-c)  
 </button>
 ```
 
-Believe it or not, but these two utilize the following functionalities:
+These controls:
 
-- Executing AJAX requests.
-- Using HTTP verbs that are usually not available for `<button>` controls.
-- Passing of additional element values in AJAX requests.
-- Transclusion (that is, *where* and *how* to insert the server response data)
+- Execute AJAX requests
+- Use HTTP verbs not natively available to `<button>`
+- Pass additional element values
+- Specify where and how to insert server response data
 
-And not a single line of JavaScript was needed to make it work. This is how powerful hypermedia architecture actually is.
+No custom JavaScript is required for this functionality.
 
 ### _hyperscript
 
-We also use [_hyperscript](https://hyperscript.org/), a small library for event handling and DOM manipulation. With it, we can listen to and dispatch events, manipulate DOM objects, all without leaving HTML.
-
-Here's an example from this project:
+The project also uses [_hyperscript](https://hyperscript.org/) for event handling and DOM manipulation directly in HTML. For example:
 
 ```html
 <button id="edit-c" class="btn btn-primary"
@@ -96,177 +96,161 @@ Here's an example from this project:
       hx-get="/contacts"
       hx-target="#main"
       hx-swap="innerHTML">Back</button>
+
 ```
 
-In the second `<button>` control we have a few bits of _hyperscript that does the following:
+The second `<button>` uses _hyperscript to:
 
-- reacts to click events
-- then removes the control with *id=edit-c*
-- then removes the button that reacted to click event (it removes itself)
+- React to click events
+- Remove the control with `id=edit-c`
+- Remove itself
 
-The final result is the removal of the buttons `Edit` and `Delete`. Only the button `Back` remains.
+After clicking, only the `Back` button remains.
 
 ![using_hyperscript](videos/using_hyperscript.gif)
 
------
-
-Instead of sending JSONs back and forth (*and each time parsing them according to some internal logic*), we can use HTML as originally designed: as a vehicle for meaningful hypermedia applications. The HTTP protocol exists because of HTML, but these days we mostly transfer JSON over it. This actually makes little sense, because JSON can't transport application semantics, which effectively cripples the original meaning of the *client-server archiecture* of the web. No wonder we need massive JS frameworks on our frontends, because our servers are mostly just data providers with JSON APIs. And JSON APIs aren't "RESTful".
-
------
+The application uses HTML for client-server communication, not JSON. This approach preserves application semantics and reduces the need for complex JavaScript frameworks on the frontend.
 
 ### Why C++ for the backend?
 
-The book's example backend source code is written in Python and it can be used instead of C++. In fact, I have tried to mimic the original Python APIs, so that there should be no big gaps in understanding them both. I was writing the C++ code while reading the respective chapters.
-
-But as `htmx` is very language agnostic, there is no problem of using any language whatsoever, so I used C++. This is also good from the learning perspective as it forces me to double check everything.
-
-I think that we should remove bloat not only from our frontends [*put any massive JS framework in here*], but also from our backends [*put any massive backend framework in here*]. Massive software consumes massive amounts of time and energy. **Human** time and energy as well as **CPU** cycles and electricity.
+The original backend example in the book is written in Python. This project uses C++ to demonstrate that htmx is language-agnostic and to provide a minimal backend without unnecessary dependencies.
 
 ## Setup
 
-### MacOS, Linux
+A C++20 compiler is required. GCC 12+, Clang 15+, or MSVC 19.34+ (VS 2022 17.4+)
+all work. This project uses [vcpkg](https://vcpkg.io/) for dependency management and
+[Meson](https://mesonbuild.com/) 1.4+ as the build system.
 
-A few C++ libraries are needed for the compilation to succeed. This project uses [vcpkg](https://vcpkg.io/en/index.html) as its package manager, but you are free to choose any other instead.
+### Quick Start
 
-To install a package, simply invoke `vcpkg install PACKAGE_NAME`.
+1. Install vcpkg (if not already installed):
 
-The following packages are needed:
+   ```bash
+   git clone https://github.com/microsoft/vcpkg.git
+   cd vcpkg && ./bootstrap-vcpkg.sh  # or .\bootstrap-vcpkg.bat on Windows
+   ```
+
+2. Install dependencies. On Windows use the `x64-windows-static-md` triplet
+   (static libraries, dynamic CRT — avoids CRT mismatch with Meson):
+
+   ```bash
+   # Windows
+   vcpkg install drogon[ctl] fmt argparse brotli zlib openssl sqlite3 soci[sqlite3] jsoncpp --triplet x64-windows-static-md --host-triplet x64-windows
+
+   # macOS / Linux
+   vcpkg install
+   ```
+
+3. Configure and build. On Windows, add `drogon_ctl` to PATH and point Meson
+   at the vcpkg installed tree:
+
+   ```bash
+   # Windows (PowerShell)
+   $env:PATH += ";<vcpkg_root>/installed/x64-windows-static-md/tools/drogon"
+   meson setup builddir --vsenv `
+     --cmake-prefix-path="<vcpkg_root>/installed/x64-windows-static-md" `
+     --pkg-config-path="<vcpkg_root>/installed/x64-windows-static-md/lib/pkgconfig"
+
+   # macOS / Linux
+   meson setup builddir
+
+   # Build
+   meson compile -C builddir
+   ```
+
+4. Run tests (when Criterion is available):
+
+   ```bash
+   meson test -C builddir
+   ```
+
+5. Start the server from the build directory so Drogon finds
+   static assets (vendor files, styles.css, index.html):
+
+   ```bash
+   cd builddir && ./demo_web_server
+   ```
+
+   Open <http://127.0.0.1:3000> in a browser.
+
+### Dependencies
+
+All dependencies are declared in `vcpkg.json` and installed automatically by
+`vcpkg install`. The full list:
+
+| Package   | Minimum Version | Purpose                             |
+| --------- | --------------- | ----------------------------------- |
+| drogon    | 1.9.0           | HTTP framework, routing, templates  |
+| fmt       | 10.0            | String formatting                   |
+| argparse  | 3.0             | CLI argument parsing                |
+| soci      | 4.0             | C++ database access                 |
+| sqlite3   | 3.40            | Embedded database                   |
+| jsoncpp   | 1.9             | JSON config parsing                 |
+| openssl   | 3.0             | TLS support                         |
+| zlib      | —               | Compression                         |
+| brotli    | —               | Compression                         |
+| criterion | 2.4             | Unit test framework                 |
+
+### macOS, Linux
+
+Install build tools and Meson via your package manager:
 
 ```bash
-    drogon
-    drogon[ctl]
-    fmt
-    argparse
-    brotli
-    zlib
-    openssl
-    sqlite3
-    soci[core]
-    soci[sqlite3]
-    libuuid
+# Ubuntu/Debian
+sudo apt install build-essential meson ninja-build pkg-config
+
+# macOS
+brew install meson pkg-config
 ```
 
-The search for them is easy: `vcpkg search PACKAGE_NAME`
+Then follow the Quick Start steps above. On Linux you can optionally install
+dependencies from system packages (`apt install libdrogon-dev libcriterion-dev ...`)
+instead of vcpkg.
 
-### Windows
+### Windows — Compiler Choice
 
-#### MSYS
+Both MSVC and MinGW work. Pick one:
 
-Windows users will have to setup [MSYS](https://www.msys2.org/) environment first. After the installation, select the `MSYS2 MINGW64` entry in the Windows Start Menu. **Do not use the `MSYS UCRT4` or any other entry!**
+**Path A: MSVC (recommended).** Install Visual Studio 2022 with the "Desktop
+development with C++" workload. No MSYS, no pacman, no manual Drogon compilation.
+`vcpkg install` handles everything.
 
-#### Build system
-
-In the newly opened bash window, enter this command to install the required packages:
-
-`pacman -S git mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake make mingw-w64-x86_64-c-ares mingw-w64-x86_64-jsoncpp mingw-w64-x86_64-openssl`
-
-Check if the compiler is available with `which g++`. You should see a message like this:
-
-```shell
-$ which g++
-/mingw64/bin/g++
-```
-
-You will also need an editor to update the environment paths, so install your preferred one, e.g. `pacman -Sy nano` or `pacman -Sy vim`
-
-Open your `.bash_profile` with `nano .$HOME/.bash_profile` and add these three lines to the end of the file:
+**Path B: MinGW via MSYS2.** Install [MSYS2](https://www.msys2.org/). Open the
+`MSYS2 MINGW64` shell. Set the vcpkg triplet before installing dependencies:
 
 ```bash
-PATH=/mingw64/bin:$PATH
 export VCPKG_DEFAULT_TRIPLET=x64-mingw-static
 export VCPKG_DEFAULT_HOST_TRIPLET=x64-mingw-static
 ```
 
-Save & close the file. Reload it with: `source $HOME/.bash_profile` or `. ~/.bash_profile`
+Then follow the same `vcpkg install` + `meson setup` + `meson compile` steps.
+All packages including Drogon compile via vcpkg with the MinGW triplet.
 
-The two triplet entries will be needed later to instruct `vcpkg` to use MinGW instead of the default Visual C++ compiler. And as we also want to compile static libraries only, we announce it by using the `static` suffix.
+### Build System
 
-#### Drogon
-
-Unlike other packages, Drogon will not be installed with `vcpkg`. The currently available vcpkg package thows compilation errors, which is the reason why we have to compile it manually.
-
-Clone the Drogon sources and prepare the build environment. The `/c/bin/drogon` path from the example below should be adapted to your local settings. The root of this path (`/c/bin`) must map to an already existing path in the Windows system, e.g. `C:/bin` or any other path of your choosing.
+The project uses [Meson](https://mesonbuild.com/) 1.4+ with vcpkg manifest mode.
+There are no hardcoded paths to edit. The build steps are:
 
 ```bash
-git clone https://github.com/drogonframework/drogon --recursive
-mkdir drogon/build
-cd drogon/build
-cmake .. -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX:PATH=/c/bin/drogon
+# Install all dependencies (once)
+vcpkg install
+
+# Configure
+meson setup builddir
+
+# Build
+meson compile -C builddir
+
+# Run tests
+meson test -C builddir
 ```
 
-Now compile Drogon with `make -j` and wait until it completes.
+Docker builds are also supported. See [DOCKER.md](DOCKER.md) for instructions.
 
-Finally, install Drogon with `make install`.
-
-You should now see a list of folders in `C:/bin/drogon`.
-
-![drogon_dir](images/drogon_dir.png)
-
-#### Static libraries
-
-The second step is the installation of a few libraries that will be linked statically. We will use `vcpkg` to compile them all.
-
-From the same bash window, issue the following commands to setup `vcpkg`.
-
-```bash
-cd $HOME
-git clone https://github.com/microsoft/vcpkg.git
-cd vcpkg
-./bootstrap-vcpkg.bat
-```
-
-*Notice:*
-
-If you pefer to install vcpkg files under different root path, change the first command "cd $HOME" from the script above.
-For example: `cd /c/Users/WINDOWS_USER_NAME`
-In MSYS Bash, the Windows file system is located under `/c`.
-And your MSYS $HOME folder is located under "home" in your Windows MSYS root folder.
-
-From the `vcpkg` folder, issue the following commands to install required libraries:
-
-```bash
-./vcpkg.exe install argparse
-./vcpkg.exe install fmt
-./vcpkg.exe install brotli
-./vcpkg.exe install zlib
-./vcpkg.exe install openssl
-./vcpkg.exe install sqlite3
-./vcpkg.exe install soci
-./vcpkg.exe install soci[sqlite3]
-```
-
-Now you can compile this project via PoweShell with `./buildall.ps1`.
-
-But, don't forget to change `vcpkg_root` in `meson.build` first. This path should point at the previously cloned `vcpkg` repository.
-
-![windows_build](videos/windows_build.gif)
-
-### Meson
-
-My build system of choice is [Meson](https://mesonbuild.com/), because `Makefiles` are hard to maintain and I simply don't want to learn how to use `CMake`. Life is too short for user-hostile software.
-
-There are two scripts, `buildall.sh` (macOS/Linux) and `buildall.ps1` (Windows). With these two the following steps will be executed:
-
-- Copy web files (index.html, styles etc.) to `builddir` (*only on Windows, in macOS/Linux this will be done by Meson*)
-- Initialize and run Meson:
-  - use `drogon_ctl` to convert CSPs into C++ source files and put them into `src/views`
-  - compile sources from `src`
-  - put the output binary into `builddir`
-
-A C++20 compiler is needed. I'm using GNU C++ v12.1.0.
-
-Before trying to build the project, please, adapt these two variables in the `meson.build` file:
-
-- [triplet](meson.build#L26)
-- [vcpkg_root](meson.build#L34)
-
-The `triplet` carries the information about the host machine, e.g. `x64-osx`.
-
-The `vcpkg_root` is the root folder containing packages installed by `vcpkg`.
-
-`drogon_ctl` will be used by `Meson` to convert CSP templates into C++ files.
-
-![compile_project](videos/compile_project.gif)
+A C++20 compiler is required. GCC 12+, Clang 15+, or MSVC 19.34+ (VS 2022 17.4+)
+all work. The `meson.build` file uses `dependency()` to discover libraries
+installed by vcpkg or the system package manager. No manual path configuration
+is needed.
 
 ## Application architecture
 
@@ -344,7 +328,7 @@ PS > .\builddir\test_demo_web_server.exe
 
 The web application starts by loading the `index.html` which contains a `div` tag with *id="main"*. Throughout the app, this tag will be used by other controls to dynamically replace its contents without any page refreshes. However, unlike other typical `modern` web apps, we use no JS frameworks like React or Angular to make the app responsive. Instead, we only use `htmx` as our scripting library.
 
-There are also three `bootstrap` resources involved, but this is just make the app look better. Bootstrap is not a requirement and can be replaced by any other library or own stylesheets. The same applies to `jQuery` that is included as a bootstrap dependency. Any of those libraries can be safely removed as they don't affect `htmx` or `_hyperscript`.
+Bootstrap and jQuery are included for styling and can be replaced or removed. They are not required for htmx or _hyperscript functionality.
 
 The web app communicates with the server in a standard request-response fashion. But unlike so many other web apps out there, no JSON is being used. Instead, the server is only sending pieces of HTML code that the client uses to update the current state of the app.
 
@@ -366,7 +350,7 @@ Optional arguments:
 
 ### Drogon configuration file
 
-You can also use the included Drogon's `config.json` to control the behavior of the server. As Drogon offers [lots of options](https://github.com/drogonframework/drogon/blob/master/config.example.json), you should first [make yourself familiar with it](https://github.com/drogonframework/drogon-docs/blob/master/ENG-10-Configuration-File.md). The configuration file in this project contains only a few settings.
+You can also use the included Drogon's `config.json` to control the behavior of the server. As Drogon offers [lots of options](https://github.com/drogonframework/drogon/blob/master/config.example.json), you should first [make yourself familiar with it](https://github.com/drogonframework/drogon-docs/blob/master/ENG/ENG-11-Configuration-File.md). The configuration file in this project contains only a few settings.
 
 ### Web Server configuration file
 
