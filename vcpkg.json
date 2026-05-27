@@ -1,0 +1,16 @@
+{
+    "name": "hda-with-cpp",
+    "version": "0.1.0",
+    "description": "Hypermedia-driven application demo with htmx and C++ (Drogon)",
+    "dependencies": [
+        "drogon",
+        "fmt",
+        "argparse",
+        "soci",
+        "sqlite3",
+        "jsoncpp",
+        "openssl",
+        "zlib",
+        "brotli"
+    ]
+}

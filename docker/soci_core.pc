@@ -1,0 +1,10 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib/x86_64-linux-gnu
+includedir=${prefix}/include
+
+Name: soci_core
+Description: SOCI core library
+Version: 4.0.3
+Libs: -L${libdir} -lsoci_core
+Cflags: -I${includedir}

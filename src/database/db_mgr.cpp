@@ -3,12 +3,21 @@
 
 #include <fmt/format.h>
 
+#include <fstream>
 #include <iostream>
+#include <sstream>
 
-#include "../server/server_config.hpp"
+#include "server/server_config.hpp"
 
 using namespace dws::database;
 using namespace dws::models;
+
+// Whitelist of column names allowed in search queries.
+// Any column not in this set is rejected to prevent SQL injection
+// via the column name parameter.
+const std::set<std::string> DbManager::ALLOWED_COLUMNS = {
+    "firstname", "lastname", "email", "phone"
+};
 
 DbManager::DbManager()
     : _db(session(sqlite3, ServerConfig::instance().get("database", "file"))) {}
@@ -17,19 +26,7 @@ DbManager::~DbManager() { _db.close(); }
 
 Contact DbManager::get_contact(unsigned long id) {
   Contact c{};
-  _db << fmt::format("select * from contacts where id = {}", id), into(c);
-  return c;
-}
-/// @brief Returns a contact by using a where clause
-/// @param where_args where clause elements, e.g. FirstName = 'John'
-/// @return Contact object
-Contact DbManager::get_contact(const std::string& where_args) {
-  Contact c{};
-  std::string query = "select * from contacts";
-  _db.set_query_transformation([&where_args](std::string const& q) {
-    return q + " where " + where_args;
-  });
-  _db << query, into(c);
+  _db << "select * from contacts where id = :id", use(id), into(c);
   return c;
 }
 
@@ -44,14 +41,21 @@ std::vector<Contact> DbManager::get_contacts() {
   return cs;
 }
 
-std::vector<Contact> DbManager::get_contacts(const std::string& where_args) {
+std::vector<Contact> DbManager::search_contacts(
+    const std::string& column, const std::string& value) {
+  // Reject unknown column names to prevent SQL injection.
+  if (ALLOWED_COLUMNS.find(column) == ALLOWED_COLUMNS.end()) {
+    return {};
+  }
+
   Contact c{};
   std::vector<Contact> cs{};
-  std::string query = "select * from contacts";
-  _db.set_query_transformation([&where_args](std::string const& q) {
-    return q + " where " + where_args;
-  });
-  statement st = (_db.prepare << query, into(c));
+  std::string query =
+      "select * from contacts where " + column + " like :value";
+  std::string pattern = "%" + value + "%";
+  statement st = (_db.prepare << query,
+                  use(pattern),
+                  into(c));
   st.execute();
   while (st.fetch()) {
     cs.push_back(c);
@@ -87,4 +91,32 @@ bool DbManager::delete_contact(unsigned long id) {
                 use(id)));
   st.execute(true);
   return (st.get_affected_rows() > 0);
+}
+
+unsigned long DbManager::import_from_csv(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        return 0;
+    }
+    std::string line;
+    std::getline(file, line);  // discard header
+    unsigned long count = 0;
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string firstName, lastName, email, phone;
+        if (std::getline(ss, firstName, ',') &&
+            std::getline(ss, lastName, ',') &&
+            std::getline(ss, email, ',') &&
+            std::getline(ss, phone, ',')) {
+            Contact c{};
+            c.FirstName = firstName;
+            c.LastName = lastName;
+            c.EMail = email;
+            c.Phone = phone;
+            if (save_contact(c)) {
+                ++count;
+            }
+        }
+    }
+    return count;
 }

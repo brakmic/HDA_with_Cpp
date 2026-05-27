@@ -4,71 +4,62 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>C++ Web Server</title>
+    <title>HDA with htmx and C++</title>
     <link rel="icon" type="image/x-icon" href="cpp_favicon.ico" />
-    <!-- Bootstrap -->
+    <!-- Bootstrap 5 CSS -->
     <link
       rel="stylesheet"
-      href="vendor/bootstrap-3.4.1-dist/css/bootstrap.min.css"
+      href="vendor/bootstrap-5.3.5-dist/css/bootstrap.min.css"
+    />
+    <!-- Font Awesome 6 (local, with webfonts) -->
+    <link
+      rel="stylesheet"
+      href="vendor/fontawesome-free-6.7.2-web/css/fontawesome.min.css"
     />
     <link
       rel="stylesheet"
-      href="vendor/bootstrap-3.4.1-dist/css/bootstrap-theme.min.css"
+      href="vendor/fontawesome-free-6.7.2-web/css/brands.min.css"
     />
     <link
       rel="stylesheet"
-      href="vendor/fontawesome-free-6.2.1-web/css/fontawesome.min.css"
+      href="vendor/fontawesome-free-6.7.2-web/css/solid.min.css"
     />
-    <link
-      rel="stylesheet"
-      href="vendor/fontawesome-free-6.2.1-web/css/brands.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="vendor/fontawesome-free-6.2.1-web/css/solid.min.css"
-    />
-    <!-- own styles -->
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
-    <div id="main" class="container">
-      <div class="jumbotron">
+  <body class="d-flex flex-column min-vh-100">
+    <div id="main" class="container flex-grow-1">
+      <div class="p-5 mt-4 mb-4 bg-body-tertiary rounded-3">
         <div class="row">
-          <div class="col-md-12 col-md-offset-1">
+          <div class="col-12">
             <h1>Hypermedia-driven web apps</h1>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h4 class="panel-title">
+        <div class="row mt-3">
+          <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">
                   HDAs with <strong>htmx</strong> and
                   <strong>Drogon C++ web framework</strong>
-                </h4>
+                </h5>
               </div>
-              <div class="panel-body">
+              <div class="card-body text-center">
                 <figure class="figure">
                   <img
                     class="figure-img img-fluid rounded"
                     width="630"
                     src="videos/htmx_with_cpp.gif"
+                    alt="Demo screenshot"
                   />
-
-                  <figcaption class="figure-caption"></figcaption>
                 </figure>
               </div>
-              <!-- panel body -->
             </div>
-            <!-- panel -->
           </div>
-          <!-- div col -->
         </div>
-        <!-- div row -->
-        <div class="row">
-          <div class="col-md-12 col-md-offset-4">
+        <div class="row mt-3">
+          <div class="col-12 text-center">
             <a
-              class="btn btn-success btn-lg"
+              class="btn btn-success btn-lg me-2"
               role="button"
               href="https://github.com/brakmic/HDA-Demo"
               ><i class="fa-brands fa-square-github fa-lg"></i>
@@ -76,7 +67,6 @@
             </a>
             <button
               class="btn btn-primary btn-lg"
-              role="button"
               hx-get="/contacts"
               hx-target="#main"
               hx-swap="innerHTML"
@@ -84,26 +74,21 @@
               <i class="fa-solid fa-cloud-bolt fa-lg"></i>
               Run demo
             </button>
-            <!-- col -->
           </div>
-          <!-- row -->
         </div>
-        <!-- jumbotron -->
       </div>
     </div>
-    <footer class="navbar-default navbar-fixed-bottom">
-      <div class="container-fluid">
-        <span
+    <footer class="py-3 bg-body-tertiary mt-auto">
+      <div class="container text-center">
+        <span class="text-body-secondary"
           ><a href="https://brakmic.com" target="_blank"
-            >Built with <i class="fa-solid fa-heart fa-lg"></i> and
-            <i class="fa-brands fa-cuttlefish">++</i> by Harris Brakmic</a
+            >Built with <i class="fa-solid fa-heart"></i> and C++ by Harris Brakmic</a
           ></span
         >
       </div>
     </footer>
-    <!-- jQuery & Bootstrap-->
-    <script src="vendor/jquery-3.6.3.min.js"></script>
-    <script src="vendor/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="vendor/bootstrap-5.3.5-dist/js/bootstrap.bundle.min.js"></script>
     <!-- hyperscript -->
     <script src="vendor/hyperscript.min.js"></script>
     <!-- htmx -->

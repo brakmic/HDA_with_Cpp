@@ -1,30 +1,22 @@
 <div class="row">
-<dv class="col col-md-4">
-<div name="new-contact" class="panel panel-primary">
-  <div class="panel-heading">Add new contact</div>
-  <div class="panel-body">
-  <div class="input-group md-3 input-group-sm">
-     <div class="input-group-prepend">
-       <span class="input-group-text">First name</span>
-    </div>
+<div class="col-md-4">
+<div name="new-contact" class="card border-primary">
+  <div class="card-header bg-primary text-white">Add new contact</div>
+  <div class="card-body">
+  <div class="input-group mb-3 input-group-sm">
+    <span class="input-group-text">First name</span>
     <input class="form-control" name="firstname" id="firstname" type="text" placeholder="First name" value="">
   </div>
-  <div class="input-group md-3 input-group-sm">
-     <div class="input-group-prepend">
-       <span class="input-group-text">Last name</span>
-    </div>
+  <div class="input-group mb-3 input-group-sm">
+    <span class="input-group-text">Last name</span>
     <input class="form-control" name="lastname" id="lastname" type="text" placeholder="Last name" value="">
   </div>
-  <div class="input-group md-3 input-group-sm">
-     <div class="input-group-prepend">
-       <span class="input-group-text">EMail</span>
-    </div>
+  <div class="input-group mb-3 input-group-sm">
+    <span class="input-group-text">EMail</span>
     <input class="form-control" name="email" id="email" type="text" placeholder="EMail" value="">
   </div>
-  <div class="input-group md-3 input-group-sm">
-     <div class="input-group-prepend">
-       <span class="input-group-text">Phone</span>
-    </div>
+  <div class="input-group mb-3 input-group-sm">
+    <span class="input-group-text">Phone</span>
     <input class="form-control" name="phone" id="phone" type="text" placeholder="Phone" value="">
   </div>
   <div class="btn-toolbar">
@@ -41,4 +33,4 @@
   </div>
 </div>
 </div>
-</dv>
+</div>

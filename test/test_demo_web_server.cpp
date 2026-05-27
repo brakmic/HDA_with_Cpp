@@ -2,7 +2,7 @@
 #include <criterion/logging.h>
 #include <string.h>
 
-#include "../src/server/server_config.hpp"
+#include "server/server_config.hpp"
 
 ReportHook(PRE_INIT)(struct criterion_test *test) {
   printf("testing %s in category %s\n", test->name, test->category);

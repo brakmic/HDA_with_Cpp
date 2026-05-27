@@ -1,0 +1,11 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib/x86_64-linux-gnu
+includedir=${prefix}/include
+
+Name: soci_sqlite3
+Description: SOCI SQLite3 backend
+Version: 4.0.3
+Requires: soci_core
+Libs: -L${libdir} -lsoci_sqlite3
+Cflags: -I${includedir}

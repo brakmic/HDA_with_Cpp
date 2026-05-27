@@ -1,0 +1,27 @@
+# Build artifacts
+builddir/
+build/
+*.o
+*.obj
+*.exe
+
+# Git
+.git/
+.gitignore
+
+# CI/CD configuration (not needed in production image)
+.github/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker self-reference
+Dockerfile
+.dockerignore

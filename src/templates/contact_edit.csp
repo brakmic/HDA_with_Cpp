@@ -1,5 +1,5 @@
 <%inc
-#include "../models/contact.hpp"
+#include "models/contact.hpp"
 %>
 <%c++
     using namespace dws::models;
@@ -7,27 +7,19 @@
 %>
 <div name="edit-contact">
     <div class="input-group mb-3 input-group-sm">
-     <div class="input-group-prepend">
-       <span class="input-group-text">First name</span>
-    </div>
+    <span class="input-group-text">First name</span>
     <input class="form-control" name="firstname" id="firstname" type="text" placeholder="First name" value="{%contact.FirstName%}">
   </div>
   <div class="input-group mb-3 input-group-sm">
-     <div class="input-group-prepend">
-       <span class="input-group-text">Last name</span>
-    </div>
+    <span class="input-group-text">Last name</span>
     <input class="form-control" name="lastname" id="lastname" type="text" placeholder="Last name" value="{%contact.LastName%}">
   </div>
   <div class="input-group mb-3 input-group-sm">
-     <div class="input-group-prepend">
-       <span class="input-group-text">EMail</span>
-    </div>
+    <span class="input-group-text">EMail</span>
     <input class="form-control" name="email" id="email" type="text" placeholder="EMail" value="{%contact.EMail%}">
   </div>
   <div class="input-group mb-3 input-group-sm">
-     <div class="input-group-prepend">
-       <span class="input-group-text">Phone</span>
-    </div>
+    <span class="input-group-text">Phone</span>
     <input class="form-control" name="phone" id="phone" type="text" placeholder="Phone" value="{%contact.Phone%}">
   </div>
     <button class="btn btn-secondary"

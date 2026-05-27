@@ -1,0 +1,11 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: drogon
+Description: Drogon HTTP framework
+Version: 1.9.11
+Requires: libssl libcrypto zlib
+Libs: -L${libdir} -ldrogon -ltrantor -ljsoncpp -lsqlite3 -lcares -luuid -lbrotlienc -lbrotlidec -lbrotlicommon
+Cflags: -I${includedir}

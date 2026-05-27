@@ -6,20 +6,7 @@
 #include <iostream>
 #include <string>
 
-#include "../server/server_config.hpp"
-
-/// @brief Will be executed after drogon::app().run().
-/// more info:
-/// https://github.com/drogonframework/drogon-docs/blob/master/ENG-12-AOP-Aspect-Oriented-Programming.md
-void displayNetworkInfo() {
-  auto listeners = drogon::app().getListeners();
-
-  for (const auto& l : listeners) {
-    std::cout << "web server listening on "
-              << fmt::format("http://{}:{}", l.toIp(), l.toIpPort())
-              << std::endl;
-  }
-}
+#include "server/server_config.hpp"
 
 int main(int argc, char* argv[]) {
   ServerConfig config{};
@@ -46,7 +33,12 @@ int main(int argc, char* argv[]) {
 
   drogon::app().loadConfigFile("config.json");
 
-  drogon::app().registerBeginningAdvice(displayNetworkInfo);
+  // registerBeginningAdvice fires per thread, so we print here instead.
+  std::cout << "web server listening on http://"
+            << (ip.empty() ? "127.0.0.1" : ip)
+            << ":"
+            << (port > 0 ? port : 3000)
+            << std::endl;
 
   drogon::app().run();
   return 0;

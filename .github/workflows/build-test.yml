@@ -1,0 +1,70 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            compiler: gcc
+
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }} / ${{ matrix.compiler }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential meson ninja-build pkg-config cmake \
+            libsoci-dev libsqlite3-dev libjsoncpp-dev libfmt-dev \
+            libargparse-dev libbrotli-dev libssl-dev uuid-dev \
+            libc-ares-dev zlib1g-dev libboost-dev libcriterion-dev
+
+      - name: Build and install Drogon
+        run: |
+          git clone --depth 1 --recursive --branch v1.9.11 \
+            https://github.com/drogonframework/drogon.git /tmp/drogon
+          cmake -S /tmp/drogon -B /tmp/drogon/build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_SHARED_LIBS=ON \
+            -DBUILD_CTL=ON
+          cmake --build /tmp/drogon/build -j$(nproc)
+          sudo cmake --install /tmp/drogon/build
+          sudo ldconfig
+
+      - name: Install pkg-config files for Drogon and SOCI
+        run: |
+          sudo mkdir -p /usr/local/lib/pkgconfig
+          sudo cp docker/drogon.pc /usr/local/lib/pkgconfig/
+          sudo cp docker/trantor.pc /usr/local/lib/pkgconfig/
+          sudo cp docker/soci_core.pc /usr/local/lib/pkgconfig/
+          sudo cp docker/soci_sqlite3.pc /usr/local/lib/pkgconfig/
+
+      - name: Configure
+        run: |
+          meson setup builddir \
+            --buildtype=release \
+            --cmake-prefix-path=/usr/local
+
+      - name: Build
+        run: meson compile -C builddir
+
+      - name: Test
+        run: |
+          cp server_config.json demo.db builddir/
+          meson test -C builddir --print-errorlogs

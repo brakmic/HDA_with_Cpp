@@ -1,28 +1,27 @@
 <%inc
-#include "../models/contact.hpp"
+#include "models/contact.hpp"
 %>
 <%c++
     using namespace dws::models;
     auto contacts=@@.get<std::vector<Contact>>("contacts");
 %>
+<h2>Contacts</h2>
 <%c++ if(contacts.size()>0){%>
-    <h2>Contacts</h2>
 <div class="row">
   <div class="col-lg-6">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default"
+    <div class="input-group mb-3">
+      <button class="btn btn-secondary"
               hx-post="/contacts"
               hx-target="#main"
               hx-include="[name='firstname']">Search</button>
-      </span>
       <input type="text" name="firstname" class="form-control" placeholder="Contact's first name">
     </div>
   </div>
 </div>
 
-    <table class="table table-striped table-hover table-responsive table-bordered">
-      <thead class="thead-dark">
+    <div class="table-responsive">
+    <table class="table table-striped table-hover table-bordered">
+      <thead class="table-dark">
         <tr>
           <th scope="col">ID</th>
           <th scope="col">First name</th>
@@ -58,6 +57,7 @@
           <%c++}%>
       </tbody>
     </table>
+    </div>
     <p>
       <button data-bs-toggle="modal"
               data-bs-target="#addContactModal"
@@ -66,6 +66,14 @@
               hx-target="#main"
               hx-swap="innerHTML">Add Contact</button>
     </p>
-    <%c++ }%>
+    <%c++ } else { %>
+    <div class="alert alert-info mt-3">
+      <p>The contact list is empty.</p>
+      <button class="btn btn-primary"
+              hx-get="/contacts"
+              hx-target="#main"
+              hx-swap="innerHTML">Reload</button>
+    </div>
+    <%c++ } %>
 </body>
 </html>

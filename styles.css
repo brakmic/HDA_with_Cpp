@@ -1,7 +1,19 @@
-.app-container {
-  overflow-x:hidden;
+/* Card title reset for Drogon CSP templates */
+.card-title {
+  margin-bottom: 0;
 }
 
-.app-jumbotron {
-  margin-top: 5px; 
+/* Input group spacing in forms */
+.input-group-sm > .form-control {
+  font-size: 0.875rem;
+}
+
+/* Button toolbar spacing */
+.btn-toolbar .btn {
+  margin-right: 0.5rem;
+}
+
+/* Contact action links */
+a[hx-get], a[hx-delete] {
+  margin-right: 0.75rem;
 }

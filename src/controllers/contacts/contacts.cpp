@@ -7,8 +7,8 @@
 #include <unordered_map>
 #include <utility>
 
-#include "../database/db_mgr.hpp"
-#include "../dtos/contact_dto.hpp"
+#include "database/db_mgr.hpp"
+#include "dtos/contact_dto.hpp"
 
 using namespace dws::database;
 using namespace dws::dtos;
@@ -21,9 +21,8 @@ void Contacts::list(const HttpRequestPtr &req,
   auto params = req->getParameters();
   if (params.size() > 0) {
     const auto &[column, value] = *params.begin();
-    auto contact =
-        db.get_contacts(fmt::format("{} like '%{}%'", column, value));
-    data.insert("contacts", contact);
+    auto contacts = db.search_contacts(column, value);
+    data.insert("contacts", contacts);
   } else {
     data.insert("contacts", db.get_contacts());
   }
@@ -64,9 +63,14 @@ void Contacts::create(const HttpRequestPtr &req,
         .Phone = dto.Phone,
     };
     bool success = db.save_contact(c);
-    // return all contacts via GET /contacts request
+    if (!success) {
+      res = HttpResponse::newHttpResponse();
+      res->setStatusCode(HttpStatusCode::k500InternalServerError);
+      callback(res);
+      return;
+    }
     list(HttpRequest::newHttpRequest(),
-    std::forward<decltype(callback)>(callback));
+         std::forward<decltype(callback)>(callback));
   } else {
     HttpViewData data;
     data.insert("contact", dto);
@@ -97,21 +101,29 @@ void Contacts::update(const HttpRequestPtr &req,
     existing.LastName = dto.LastName;
     existing.EMail = dto.EMail;
     existing.Phone = dto.Phone;
-    db.update_contact(existing);
+    bool success = db.update_contact(existing);
+    if (!success) {
+      res->setStatusCode(HttpStatusCode::k500InternalServerError);
+      callback(res);
+      return;
+    }
   }
-  // return all contacts via GET / contacts request
   list(HttpRequest::newHttpRequest(),
-  std::forward<decltype(callback)>(callback));
+       std::forward<decltype(callback)>(callback));
 }
 
 void Contacts::delete_(const HttpRequestPtr &req,
                       std::function<void(const HttpResponsePtr &)> &&callback,
                       unsigned long id) {
   DbManager db;
-  HttpResponsePtr res = HttpResponse::newHttpResponse();
   auto existing = db.get_contact(id);
   if (existing.ID) {
     db.delete_contact(id);
+    // If the table is now empty, reseed from CSV automatically.
+    if (db.get_contacts().empty()) {
+      db.import_from_csv("contacts.csv");
+    }
   }
+  auto res = HttpResponse::newHttpResponse();
   callback(res);
 }

@@ -16,8 +16,26 @@ ContactDto to_ContactDto(
 }
 
 bool is_valid(const ContactDto& dto) {
-  return !dto.FirstName.empty() && !dto.LastName.empty() &&
-         !dto.EMail.empty() && !dto.Phone.empty();
+  static const size_t MAX_NAME_LENGTH = 100;
+  static const size_t MAX_EMAIL_LENGTH = 320;
+  static const size_t MAX_PHONE_LENGTH = 30;
+
+  if (dto.FirstName.empty() || dto.FirstName.length() > MAX_NAME_LENGTH) {
+    return false;
+  }
+  if (dto.LastName.empty() || dto.LastName.length() > MAX_NAME_LENGTH) {
+    return false;
+  }
+  if (dto.EMail.empty() || dto.EMail.length() > MAX_EMAIL_LENGTH) {
+    return false;
+  }
+  if (dto.EMail.find('@') == std::string::npos) {
+    return false;
+  }
+  if (dto.Phone.empty() || dto.Phone.length() > MAX_PHONE_LENGTH) {
+    return false;
+  }
+  return true;
 }
 
 std::string get_value(

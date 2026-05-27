@@ -1,0 +1,10 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: trantor
+Description: Trantor network library
+Version: 1.9.11
+Libs: -L${libdir} -ltrantor
+Cflags: -I${includedir}
