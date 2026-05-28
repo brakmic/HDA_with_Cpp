@@ -69,7 +69,13 @@ jobs:
       - name: Test
         run: |
           rm -f demo.db
-          sqlite3 demo.db "CREATE TABLE contacts (id INTEGER PRIMARY KEY AUTOINCREMENT, firstname TEXT, lastname TEXT, email TEXT, phone TEXT);"
-          sqlite3 demo.db ".mode csv" ".import contacts.csv contacts"
+          sqlite3 demo.db <<'EOSQL'
+          CREATE TABLE contacts (id INTEGER PRIMARY KEY AUTOINCREMENT, firstname TEXT, lastname TEXT, email TEXT, phone TEXT);
+          CREATE TABLE _csv_tmp ("FirstName" TEXT, "LastName" TEXT, "EMail" TEXT, "Phone" TEXT);
+          .mode csv
+          .import contacts.csv _csv_tmp
+          INSERT INTO contacts(firstname, lastname, email, phone) SELECT FirstName, LastName, EMail, Phone FROM _csv_tmp WHERE FirstName != 'FirstName';
+          DROP TABLE _csv_tmp;
+          EOSQL
           cp server_config.json demo.db builddir/
           meson test -C builddir --print-errorlogs
