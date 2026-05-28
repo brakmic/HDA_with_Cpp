@@ -147,7 +147,7 @@ all work. This project uses [vcpkg](https://vcpkg.io/) for dependency management
    ```bash
    # Windows (PowerShell)
    $env:PATH += ";<vcpkg_root>/installed/x64-windows-static-md/tools/drogon"
-   meson setup builddir --vsenv `
+   meson setup builddir --buildtype=release --vsenv `
      --cmake-prefix-path="<vcpkg_root>/installed/x64-windows-static-md" `
      --pkg-config-path="<vcpkg_root>/installed/x64-windows-static-md/lib/pkgconfig"
 
@@ -172,6 +172,9 @@ all work. This project uses [vcpkg](https://vcpkg.io/) for dependency management
    ```
 
    Open <http://127.0.0.1:3000> in a browser.
+
+   The demo requires a SQLite database with a `contacts` table. See
+   [docs/setup-database.md](docs/setup-database.md) for setup instructions.
 
 ### Dependencies
 
