@@ -27,11 +27,11 @@ struct type_conversion<dws::models::Contact> {
   typedef values base_type;
   static void from_base(const values& v, indicator /*ind*/,
                         dws::models::Contact& c) {
-    c.ID = v.get<int>("ID");
-    c.FirstName = v.get<std::string>("FirstName");
-    c.LastName = v.get<std::string>("LastName");
-    c.EMail = v.get<std::string>("EMail");
-    c.Phone = v.get<std::string>("Phone");
+    c.ID = v.get<int>("id");
+    c.FirstName = v.get<std::string>("firstname");
+    c.LastName = v.get<std::string>("lastname");
+    c.EMail = v.get<std::string>("email");
+    c.Phone = v.get<std::string>("phone");
   }
 
   static void to_base(const dws::models::Contact& c, values& v,

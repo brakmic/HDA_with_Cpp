@@ -126,23 +126,12 @@ bool DbManager::bootstrap(const std::string& db_file,
     soci::session sql(soci::sqlite3, db_file);
 
     sql << "CREATE TABLE IF NOT EXISTS contacts ("
-           "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
+           "id INTEGER PRIMARY KEY AUTOINCREMENT, "
            "firstname TEXT, "
            "lastname TEXT, "
            "email TEXT, "
            "phone TEXT"
            ")";
-
-    // Normalize column case: SOCI type conversion expects uppercase "ID".
-    // The original demo.db shipped with lowercase "id".
-    soci::rowset<soci::row> rs =
-        (sql.prepare << "PRAGMA table_info(contacts)");
-    for (auto it = rs.begin(); it != rs.end(); ++it) {
-        if (it->get<std::string>(1) == "id") {
-            sql << "ALTER TABLE contacts RENAME COLUMN id TO ID";
-            break;
-        }
-    }
 
     int count = 0;
     sql << "SELECT COUNT(*) FROM contacts", soci::into(count);
