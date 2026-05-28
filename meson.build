@@ -90,9 +90,10 @@ if not brotli_dep.found()
     brotli_dep = [brotli_enc_dep, brotli_dec_dep, brotli_com_dep]
 endif
 
-# Find drogon_ctl on PATH. Only needed to regenerate views from CSP templates.
-# Pre-generated view files are committed in src/views/ and used directly.
-drogon_ctl = find_program('drogon_ctl', required: false)
+# Find drogon_ctl on PATH. Users of vcpkg should add
+#   <vcpkg_root>/installed/<triplet>/tools/drogon
+# to their PATH before running meson.
+drogon_ctl = find_program('drogon_ctl', required: true)
 
 db_dir = src_root / 'database'
 controllers_dir = src_root / 'controllers'
@@ -111,36 +112,44 @@ db_src = db_dir / 'db_mgr.cpp'
 server_src = [server_dir / 'server_config.cpp']
 dtos_src = [dtos_dir / 'contact_dto.cpp']
 
-# Pre-generated view sources (committed in the repository)
-views_src = [
-    views_dir / 'contact.cc',
-    views_dir / 'contacts.cc',
-    views_dir / 'contact_new.cc',
-    views_dir / 'contact_edit.cc',
+# Drogon view generation from CSP templates
+drogon_ctl_dirs = []
+if os == 'windows'
+    # Use VCPKG_ROOT env var if set, otherwise rely on PATH
+    vcpkg_root = run_command(
+        'powershell', '-NoProfile', '-Command', '$env:VCPKG_ROOT',
+        check: false,
+    ).stdout().strip()
+    if vcpkg_root != ''
+        # Search under x64-windows-static-md and x64-mingw-dynamic triplets
+        drogon_ctl_dirs += join_paths(vcpkg_root, 'installed', 'x64-windows-static-md', 'tools', 'drogon')
+        drogon_ctl_dirs += join_paths(vcpkg_root, 'installed', 'x64-mingw-dynamic', 'tools', 'drogon')
+    endif
+endif
+drogon_ctl = find_program('drogon_ctl', dirs: drogon_ctl_dirs, required: true)
+
+csp_templates = [
+    'contact.csp',
+    'contacts.csp',
+    'contact_new.csp',
+    'contact_edit.csp',
 ]
 
-# Regenerate views from CSP templates when drogon_ctl is available.
-# Run: meson setup builddir -Dregenerate_views=true
-if drogon_ctl.found()
-    csp_templates = [
-        'contact.csp',
-        'contacts.csp',
-        'contact_new.csp',
-        'contact_edit.csp',
-    ]
-    foreach template : csp_templates
-        r = run_command(
-            drogon_ctl,
-            'create',
-            'view',
-            join_paths(meson.project_source_root(), view_templates_dir, template),
-            '-o',
-            join_paths(meson.project_source_root(), views_dir),
-            check: true,
-        )
-        message(template + ': ' + r.stdout().strip())
-    endforeach
-endif
+views_src = []
+foreach template : csp_templates
+    r = run_command(
+        drogon_ctl,
+        'create',
+        'view',
+        join_paths(meson.project_source_root(), view_templates_dir, template),
+        '-o',
+        join_paths(meson.project_source_root(), views_dir),
+        check: true,
+    )
+    message(template + ': ' + r.stdout().strip())
+    view_name = template.substring(0, -4)
+    views_src += views_dir / (view_name + '.cc')
+endforeach
 
 # Executable
 all_deps = [
