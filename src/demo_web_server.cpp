@@ -34,8 +34,9 @@ int main(int argc, char* argv[]) {
 
   drogon::app().loadConfigFile("config.json");
 
-  if (!DbManager::bootstrap(ServerConfig::instance().get("database", "file"),
-                            "contacts.csv")) {
+  if (!dws::database::DbManager::bootstrap(
+          ServerConfig::instance().get("database", "file"),
+          "contacts.csv")) {
     std::cerr << "warning: database bootstrap failed; "
               << "ensure demo.db and contacts.csv exist" << std::endl;
   }
