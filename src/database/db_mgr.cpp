@@ -120,3 +120,48 @@ unsigned long DbManager::import_from_csv(const std::string& filename) {
     }
     return count;
 }
+
+bool DbManager::bootstrap(const std::string& db_file,
+                          const std::string& csv_file) {
+    soci::session sql(soci::sqlite3, db_file);
+
+    sql << "CREATE TABLE IF NOT EXISTS contacts ("
+           "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+           "firstname TEXT, "
+           "lastname TEXT, "
+           "email TEXT, "
+           "phone TEXT"
+           ")";
+
+    int count = 0;
+    sql << "SELECT COUNT(*) FROM contacts", soci::into(count);
+
+    if (count > 0) {
+        return true;
+    }
+
+    std::ifstream file(csv_file);
+    if (!file.is_open()) {
+        return false;
+    }
+
+    std::string line;
+    std::getline(file, line);  // discard header
+
+    unsigned long imported = 0;
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string fn, ln, em, ph;
+        if (std::getline(ss, fn, ',') &&
+            std::getline(ss, ln, ',') &&
+            std::getline(ss, em, ',') &&
+            std::getline(ss, ph, ',')) {
+            sql << "INSERT INTO contacts(firstname, lastname, email, phone) "
+                   "VALUES(:fn, :ln, :em, :ph)",
+                soci::use(fn), soci::use(ln), soci::use(em), soci::use(ph);
+            ++imported;
+        }
+    }
+
+    return imported > 0;
+}

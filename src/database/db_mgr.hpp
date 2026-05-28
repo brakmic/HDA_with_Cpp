@@ -32,6 +32,13 @@ class DbManager {
   // rows of FirstName,LastName,EMail,Phone. Returns the count imported.
   unsigned long import_from_csv(const std::string& filename);
 
+  // Bootstrap: creates the contacts table if it does not exist and imports
+  // from a CSV file when the table is empty. Returns true if the database
+  // is ready with data after the call, false if the CSV is missing while
+  // the table is empty. Safe to call multiple times (idempotent).
+  static bool bootstrap(const std::string& db_file,
+                        const std::string& csv_file);
+
  private:
   soci::session _db;
   static const std::set<std::string> ALLOWED_COLUMNS;

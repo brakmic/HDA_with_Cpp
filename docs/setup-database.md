@@ -1,10 +1,12 @@
 # Setting up the demo database
 
-The `demo.db` SQLite file is not tracked in version control. SOCI will create an
-empty file automatically when the server starts, but it will not create the
-`contacts` table. Without the table every request to the contacts page fails with
-an error 500. Run the steps below once per checkout to set up the schema and load
-sample data.
+The server bootstraps the database automatically on startup: it creates the
+`contacts` table if it does not exist and imports `contacts.csv` when the table
+is empty. If the CSV file is present in the working directory alongside
+`server_config.json`, no manual steps are needed.
+
+The steps below are a fallback for troubleshooting or for environments where
+the CSV file is not available.
 
 ## Prerequisites
 

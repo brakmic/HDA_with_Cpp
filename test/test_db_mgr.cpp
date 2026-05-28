@@ -146,3 +146,43 @@ Test(db_mgr, search_with_sql_injection_in_value_is_safe) {
     cr_expect(results.empty() || !results.empty(),
               "SQL injection in value should not crash");
 }
+
+#include <cstdio>
+
+Test(db_mgr, bootstrap_creates_table_and_imports_csv) {
+    const std::string temp_db = "test_bootstrap_temp.db";
+    std::remove(temp_db.c_str());
+
+    bool result = DbManager::bootstrap(temp_db, "contacts.csv");
+    cr_expect(result,
+              "bootstrap should return true when CSV is found");
+
+    soci::session sql(soci::sqlite3, temp_db);
+    int count = 0;
+    sql << "SELECT COUNT(*) FROM contacts", soci::into(count);
+    cr_expect_gt(count, 0,
+                 "contacts table should contain imported rows after bootstrap");
+
+    // Idempotent: second call must not duplicate data
+    bool second = DbManager::bootstrap(temp_db, "contacts.csv");
+    cr_expect(second,
+              "bootstrap should return true on an already-populated DB");
+    int count2 = 0;
+    sql << "SELECT COUNT(*) FROM contacts", soci::into(count2);
+    cr_expect_eq(count, count2,
+                 "repeat bootstrap should not duplicate rows");
+
+    sql.close();
+    std::remove(temp_db.c_str());
+}
+
+Test(db_mgr, bootstrap_returns_false_when_csv_missing) {
+    const std::string temp_db = "test_bootstrap_nocsv.db";
+    std::remove(temp_db.c_str());
+
+    bool result = DbManager::bootstrap(temp_db, "nonexistent_file.csv");
+    cr_expect_not(result,
+                  "bootstrap should return false when CSV file is missing");
+
+    std::remove(temp_db.c_str());
+}

@@ -7,6 +7,7 @@
 #include <string>
 
 #include "server/server_config.hpp"
+#include "database/db_mgr.hpp"
 
 int main(int argc, char* argv[]) {
   ServerConfig config{};
@@ -32,6 +33,12 @@ int main(int argc, char* argv[]) {
   }
 
   drogon::app().loadConfigFile("config.json");
+
+  if (!DbManager::bootstrap(ServerConfig::instance().get("database", "file"),
+                            "contacts.csv")) {
+    std::cerr << "warning: database bootstrap failed; "
+              << "ensure demo.db and contacts.csv exist" << std::endl;
+  }
 
   // registerBeginningAdvice fires per thread, so we print here instead.
   std::cout << "web server listening on http://"
