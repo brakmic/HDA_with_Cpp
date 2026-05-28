@@ -28,16 +28,19 @@ sqlite3 demo.db "CREATE TABLE contacts (
 
 ## Import sample data
 
-The repository includes `contacts.csv` with sample records. Import it:
+The repository includes `contacts.csv` with sample records. The table has an
+autoincrement `id` column that the CSV does not provide, so import into a
+temporary table first:
 
 ```bash
-sqlite3 demo.db ".mode csv" ".import contacts.csv contacts"
-```
-
-The first row of the CSV is the header. Remove it from the table:
-
-```bash
-sqlite3 demo.db "DELETE FROM contacts WHERE rowid = 1;"
+sqlite3 demo.db <<'EOSQL'
+CREATE TABLE _csv_tmp ("FirstName" TEXT, "LastName" TEXT, "EMail" TEXT, "Phone" TEXT);
+.mode csv
+.import contacts.csv _csv_tmp
+INSERT INTO contacts(firstname, lastname, email, phone)
+  SELECT FirstName, LastName, EMail, Phone FROM _csv_tmp WHERE FirstName != 'FirstName';
+DROP TABLE _csv_tmp;
+EOSQL
 ```
 
 ## Verify
