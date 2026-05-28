@@ -115,7 +115,16 @@ dtos_src = [dtos_dir / 'contact_dto.cpp']
 # Drogon view generation from CSP templates
 drogon_ctl_dirs = []
 if os == 'windows'
-    drogon_ctl_dirs += join_paths('W:/vcpkg/installed/x64-windows-static-md', 'tools', 'drogon')
+    # Use VCPKG_ROOT env var if set, otherwise rely on PATH
+    vcpkg_root = run_command(
+        'powershell', '-NoProfile', '-Command', '$env:VCPKG_ROOT',
+        check: false,
+    ).stdout().strip()
+    if vcpkg_root != ''
+        # Search under x64-windows-static-md and x64-mingw-dynamic triplets
+        drogon_ctl_dirs += join_paths(vcpkg_root, 'installed', 'x64-windows-static-md', 'tools', 'drogon')
+        drogon_ctl_dirs += join_paths(vcpkg_root, 'installed', 'x64-mingw-dynamic', 'tools', 'drogon')
+    endif
 endif
 drogon_ctl = find_program('drogon_ctl', dirs: drogon_ctl_dirs, required: true)
 
