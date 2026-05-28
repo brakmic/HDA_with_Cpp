@@ -1,6 +1,10 @@
 # Setting up the demo database
 
-The SQLite database `demo.db` is not tracked in version control. Each developer or deployment target must create it locally.
+The `demo.db` SQLite file is not tracked in version control. SOCI will create an
+empty file automatically when the server starts, but it will not create the
+`contacts` table. Without the table every request to the contacts page fails with
+an error 500. Run the steps below once per checkout to set up the schema and load
+sample data.
 
 ## Prerequisites
 
