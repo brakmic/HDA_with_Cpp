@@ -124,8 +124,9 @@ if os == 'windows'
         check: false,
     ).stdout().strip()
     if vcpkg_root != ''
-        # Search under x64-windows-static-md and x64-mingw-dynamic triplets
+        # Search under common vcpkg triplets
         drogon_ctl_dirs += join_paths(vcpkg_root, 'installed', 'x64-windows-static-md', 'tools', 'drogon')
+        drogon_ctl_dirs += join_paths(vcpkg_root, 'installed', 'x64-windows', 'tools', 'drogon')
         drogon_ctl_dirs += join_paths(vcpkg_root, 'installed', 'x64-mingw-dynamic', 'tools', 'drogon')
     endif
 endif
