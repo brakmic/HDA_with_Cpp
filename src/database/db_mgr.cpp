@@ -126,7 +126,7 @@ bool DbManager::bootstrap(const std::string& db_file,
     soci::session sql(soci::sqlite3, db_file);
 
     sql << "CREATE TABLE IF NOT EXISTS contacts ("
-           "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+           "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
            "firstname TEXT, "
            "lastname TEXT, "
            "email TEXT, "
