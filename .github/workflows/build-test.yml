@@ -21,6 +21,8 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} / ${{ matrix.compiler }}
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout
@@ -66,5 +68,8 @@ jobs:
 
       - name: Test
         run: |
+          rm -f demo.db
+          sqlite3 demo.db "CREATE TABLE contacts (id INTEGER PRIMARY KEY AUTOINCREMENT, firstname TEXT, lastname TEXT, email TEXT, phone TEXT);"
+          sqlite3 demo.db ".mode csv" ".import contacts.csv contacts"
           cp server_config.json demo.db builddir/
           meson test -C builddir --print-errorlogs
