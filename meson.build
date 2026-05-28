@@ -62,6 +62,9 @@ argparse_dep = dependency('argparse', required: true)
 # SOCI: vcpkg uses CMake targets; system packages use pkg-config
 soci_dep = dependency('soci', modules: ['SOCI::soci_core_static', 'SOCI::soci_sqlite3_static'], required: false)
 if not soci_dep.found()
+    soci_dep = dependency('soci', modules: ['SOCI::soci_core', 'SOCI::soci_sqlite3'], required: false)
+endif
+if not soci_dep.found()
     soci_core_dep = dependency('soci_core', required: true)
     soci_sqlite3_dep = dependency('soci_sqlite3', required: true)
     soci_dep = [soci_core_dep, soci_sqlite3_dep]
